@@ -10,9 +10,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
+    "got": "^11.8.0",
     "jimp": "^0.16.1",
-    "text-to-image": "^2.4.4"
+    "jsdom": "^16.4.0",
+    "text-to-image": "^2.4.4",
+    "tough-cookie": "^4.0.0"
+  },
+  "devDependencies": {
+    "global-agent": "^2.1.12"
   }
 }
