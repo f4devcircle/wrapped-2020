@@ -8,7 +8,6 @@ const ejs = require('ejs');
  * @param {string} data.name
  * @param {string} data.hsCountText
  * @param {string} data.setlistCountText
- * @param {string} data.totalExpenseText
  * @param {Array} data.hsImages
  * @param {Array} data.hsTexts
  * @param {Array} data.setlistImages

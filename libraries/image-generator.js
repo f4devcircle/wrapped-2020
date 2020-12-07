@@ -1,5 +1,6 @@
 const textToImage = require('text-to-image');
 const jimp = require('jimp');
+const { write } = require('jimp');
 
 /**
  * Generate image for og:image, and write image into folder outputs
@@ -8,10 +9,9 @@ const jimp = require('jimp');
  * @param {string} data.hsDetailText
  * @param {string} data.setlistDetailText
  * @param {string} data.theaterCountText
- * @param {string} data.totalExpenseText
  * @param {string} data.userNameText
- * @param {string} data.hsImage
- * @param {string} data.setlistImage
+ * @param {string} data.hsImage in base64
+ * @param {string} data.setlistImage in base64
  * 
  * @returns {Buffer} image
  */
@@ -45,15 +45,7 @@ const generateImage = async (data) => {
 		fontFamily: 'Roboto',
 		fontWeight: 'bold',
 		customHeight: '60',
-	});	
-	const totalExpense = await textToImage.generate(data.totalExpenseText, {
-		margin: 0,
-		bgColor: '#ffffff00',
-		fontSize: 50,
-		fontFamily: 'Roboto',
-		fontWeight: 'bold',
-		customHeight: '50',
-	});	
+	});
 	const userName = await textToImage.generate(data.userNameText, {
 		margin: 0,
 		bgColor: '#ffffff00',
@@ -63,9 +55,9 @@ const generateImage = async (data) => {
 		maxWidth: 700,
 	});
 
-	const baseImage = await jimp.read('../assets/base.png');
-	const hsImage = await jimp.read(data.hsImage);
-	const setlistImage = await jimp.read(data.setlistImage);
+	const baseImage = await jimp.read('./assets/base.png');
+	const hsImage = await jimp.read(Buffer.from(data.hsImage, 'base64'))
+	const setlistImage = await jjimp.read(Buffer.from(data.setlistImage, 'base64'))
 	
 	hsImage.crop(0, 0, hsImage.getWidth(), hsImage.getWidth())
 		.circle();
@@ -79,7 +71,6 @@ const generateImage = async (data) => {
 		.composite(await jimp.read(Buffer.from((setlistDetail.split(','))[1], 'base64')), 460, 465)
 		.composite(await jimp.read(Buffer.from((hsCount.split(','))[1], 'base64')), 824, 135)
 		.composite(await jimp.read(Buffer.from((theaterCount.split(','))[1], 'base64')), 824, 275)
-		.composite(await jimp.read(Buffer.from((totalExpense.split(','))[1], 'base64')), 824, 420)
 		.composite(await jimp.read(Buffer.from((userName.split(','))[1], 'base64')), 145, 585)
 		.getBuffer(jimp.MIME_PNG);
 

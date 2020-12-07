@@ -62,13 +62,13 @@
 				<h4>Handshake & video call terbanyak di 2020</h4>
 
 				<% if (data.hsImages[0]) { %>
-				<img class="foto" src="<%= data.hsImages[0] %>">
+				<img class="foto" src="data:image/png;base64, <%= data.hsImages[0] %>">
 				<% } %>
 				<% if (data.hsImages[1]) { %>
-				<img class="foto" src="<%= data.hsImages[1] %>">
+				<img class="foto" src="data:image/png;base64, <%= data.hsImages[1] %>">
 				<% } %>
 				<% if (data.hsImages[2]) { %>
-				<img class="foto" src="<%= data.hsImages[2] %>">
+				<img class="foto" src="data:image/png;base64, <%= data.hsImages[2] %>">
 				<% } %>
 				
 				<% if (data.hsTexts[0]) { %>
@@ -87,13 +87,13 @@
 				<h4>Setlist paling sering ditonton di 2020</h4>
 
 				<% if (data.setlistImages[0]) { %>
-				<img class="foto" src="<%= data.setlistImages[0] %>">
+				<img class="foto" src="data:image/png;base64, <%= data.setlistImages[0] %>">
 				<% } %>
 				<% if (data.setlistImages[1]) { %>
-				<img class="foto" src="<%= data.setlistImages[1] %>">
+				<img class="foto" src="data:image/png;base64, <%= data.setlistImages[1] %>">
 				<% } %>
 				<% if (data.setlistImages[2]) { %>
-				<img class="foto" src="<%= data.setlistImages[2] %>">
+				<img class="foto" src="data:image/png;base64, <%= data.setlistImages[2] %>">
 				<% } %>
 
 				<% if (data.setlistTexts[0]) { %>
@@ -114,9 +114,6 @@
 
 				<h4>Total kehadiran teater di 2020</h4>
 				<p class="result-p" style="margin-bottom: 0px" id="result-total-setlist"><%= data.setlistCountText %></p>
-
-				<h4>Biaya simping 2020</h4>
-				<p class="result-p" style="margin-bottom: 0px" id="result-total-setlist"><%= data.totalExpenseText %></p>
 
 				<div class="share-section">
 					<a class="btn btn-info btn-sm btn-download" href="https://2020.ngidol.club">
