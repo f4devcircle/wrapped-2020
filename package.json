@@ -17,7 +17,8 @@
     "jimp": "^0.16.1",
     "jsdom": "^16.4.0",
     "text-to-image": "^2.4.4",
-    "tough-cookie": "^4.0.0"
+    "tough-cookie": "^4.0.0",
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
     "global-agent": "^2.1.12"
