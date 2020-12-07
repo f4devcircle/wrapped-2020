@@ -9,6 +9,7 @@ const {
 
 const ticketListUrl = 'mypage/ticket-list?lang=id';
 const eventListUrl = 'mypage/event-list?lang=id';
+const handshakeUrl = 'mypage/handshake-session?lang=id'
 
 const setlist = ['Saka Agari', 'Matahari Milikku', 'Pajama Drive', 'Fajar Sang Idola', 'Cara Meminum Ramune', 'Fly! Team T'];
 
@@ -79,6 +80,20 @@ class Login {
     }
   }
 
+  async getHandshakeList() {
+    try {
+      return await this.req(handshakeUrl, {
+        resolveBodyOnly: true
+      });
+    } catch (error) {
+      if (error && error.options) {
+        console.error(error.options);
+      } else {
+        console.error(error);
+      }
+    }
+  }
+
   parseShowTickets(page) {
     try {
       const watchedShows = {};
@@ -102,6 +117,7 @@ class Login {
           }
         }
       })
+
       return watchedShows;
     } catch (error) {
       console.error(error);
@@ -130,6 +146,7 @@ class Login {
           }
         }
       })
+
       return watchedShows;
     } catch (error) {
       console.error(error);
@@ -150,4 +167,50 @@ class Login {
     summary.sort((a, b) => b.sum - a.sum);
     return summary;
   }
+
+  parseHandshake(page) {
+    try {
+      const {
+        document
+      } = (new JSDOM(page)).window;
+      // to get table id, because jeketi categorizes based on id, for VC, id is sepearated by day
+      const firstHandshakeId = 68;
+      const lastHandshakeId = 147;
+      const members = {};
+      const membersArr = [];
+
+      for (let id = firstHandshakeId; id <= lastHandshakeId; id++) {
+        const table = document.querySelector(`#handshake${id}`);
+        if (table) {
+          const rows = table ? Array.from(table.querySelectorAll('tr')) : null;
+          rows.shift();
+          rows.forEach(row => {
+            const tableDatas = row.querySelectorAll('td');
+            const memberName = tableDatas[tableDatas.length - 3].innerHTML;
+            const amount = tableDatas[tableDatas.length - 2].innerHTML;
+            if (members[memberName]) {
+              members[memberName] += Number(amount);
+            } else if (memberName === '-') {} else {
+              members[memberName] = Number(amount);
+            }
+          })
+        }
+      }
+
+      for (let key in members) {
+        membersArr.push({
+          name: key,
+          total: members[key]
+        });
+      }
+
+      membersArr.sort((a, b) => b.total - a.total);
+
+      return membersArr;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
+
+module.exports = Login;
