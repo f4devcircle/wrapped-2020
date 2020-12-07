@@ -12,31 +12,36 @@ app.use(compression());
 
 app.enable('trust proxy');
 
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({
+  extended: true
+}))
 
 app.get('/', function (req, res) {
-	const { body } = req;
+  const {
+    body
+  } = req;
 
-	res.json({
-		resultUrl: 'https://google.com',
-	});
+  res.json({
+    resultUrl: 'https://google.com',
+  });
 });
 
-app.use(function(req, res, next) {
-	const err = new Error('not found');
-	err.status = 404;
-	next(err);
+app.use(function (req, res, next) {
+  const err = new Error('not found');
+  err.status = 404;
+  next(err);
 });
 
-app.use(function(err, req, res, next) {
-	res.locals.message = err.message;
-	res.locals.error = req.app.get('env') === 'development' ? err : {};
-  
-	console.log(err);
-	res.status(err.status || 500);
-	res.json({
-		error: err,
-	});
+app.use(function (err, req, res, next) {
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  console.log(err);
+  res.status(err.status || 500);
+  res.json({
+    error: err,
+  });
 });
-  
+
 module.exports = app;
