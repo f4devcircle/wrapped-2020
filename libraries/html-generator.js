@@ -16,9 +16,10 @@ const ejs = require('ejs');
  * @returns {string} html
  */
 const generateHTML = async (data) => {
-	const html = await ejs.renderFile('./assets/share.ejs', { data });
-	console.log(html);
-	return html;
+  const html = await ejs.renderFile('./assets/share.ejs', {
+    data
+  });
+  return html;
 };
 
 module.exports = generateHTML;
