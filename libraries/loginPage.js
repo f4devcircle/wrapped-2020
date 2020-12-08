@@ -45,7 +45,7 @@ class Login {
       const {
         document
       } = (new JSDOM(resp.body)).window;
-      this.username = document.querySelector('.pinx');
+      this.username = document.querySelector('.pinx').innerHTML;
 
       if (resp.body.includes('salah')) {
         throw new Error("Alamat email atau Kata kunci salah");
