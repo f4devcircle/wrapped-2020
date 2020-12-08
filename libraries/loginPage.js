@@ -30,6 +30,7 @@ class Login {
       prefixUrl: 'https://jkt48.com',
       cookieJar
     })
+    this.username = '';
   }
 
   async login(email, password) {
@@ -40,6 +41,12 @@ class Login {
           login_password: password
         },
       });
+
+      const {
+        document
+      } = (new JSDOM(page)).window;
+      this.username = document.querySelector('.pinx');
+
       if (resp.body.includes('salah')) {
         throw new Error("Alamat email atau Kata kunci salah");
       }
