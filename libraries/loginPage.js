@@ -200,11 +200,11 @@ class Login {
       for (let key in members) {
         membersArr.push({
           name: key,
-          total: members[key]
+          sum: members[key]
         });
       }
 
-      membersArr.sort((a, b) => b.total - a.total);
+      membersArr.sort((a, b) => b.sum - a.sum);
 
       return membersArr;
     } catch (error) {
