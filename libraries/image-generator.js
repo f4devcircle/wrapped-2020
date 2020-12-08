@@ -55,6 +55,7 @@ const generateImage = async (data) => {
     fontSize: 30,
     fontFamily: 'Roboto',
     maxWidth: 700,
+    customHeight: 40
   });
 
   const baseImage = await jimp.read('./assets/base.png');

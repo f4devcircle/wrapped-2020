@@ -5,15 +5,9 @@ const cors = require('cors');
 const Login = require('./libraries/loginPage');
 const app = express();
 const fs = require('fs');
-const htmlGenerator = require('./libraries/html-generator');
-const imageGenerator = require('./libraries/image-generator');
-const {
-  createSlug
-} = require('./libraries/helpers');
+const { createSlug } = require('./libraries/helpers');
 const generateHTML = require('./libraries/html-generator');
-const {
-  uploadFile
-} = require('./libraries/bucketManager');
+const { uploadFile } = require('./libraries/bucketManager');
 const generateImage = require('./libraries/image-generator');
 
 const membersJSON = JSON.parse(fs.readFileSync('./members.json', 'utf-8'));
@@ -29,16 +23,6 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: true
 }))
-
-app.get('/', function (req, res) {
-  const {
-    body
-  } = req;
-
-  res.json({
-    resultUrl: 'https://google.com',
-  });
-});
 
 app.post('/', async (req, res, next) => {
   try {
