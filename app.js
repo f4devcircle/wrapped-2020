@@ -5,9 +5,13 @@ const cors = require('cors');
 const Login = require('./libraries/loginPage');
 const app = express();
 const fs = require('fs');
-const { createSlug } = require('./libraries/helpers');
+const {
+  createSlug
+} = require('./libraries/helpers');
 const generateHTML = require('./libraries/html-generator');
-const { uploadFile } = require('./libraries/bucketManager');
+const {
+  uploadFile
+} = require('./libraries/bucketManager');
 const generateImage = require('./libraries/image-generator');
 
 const membersJSON = JSON.parse(fs.readFileSync('./members.json', 'utf-8'));
@@ -25,13 +29,15 @@ app.use(express.urlencoded({
 }))
 
 app.post('/', async (req, res, next) => {
+  const handshakeRanks = [];
+  const setlistRanks = [];
+  const login = new Login();
   try {
     const {
       email,
       password
     } = req.body;
 
-    const login = new Login();
     await login.login(email, password);
     const pages = await Promise.all([login.getTicketList(), login.getEventlist(), login.getHandshakeList()]);
     const attendance = login.combineShows(login.parseShowTickets(pages[0]), login.parseEvents(pages[1]));
@@ -43,8 +49,6 @@ app.post('/', async (req, res, next) => {
     const totalHS = `${handshakes.reduce((cur, val) => cur + val.sum, 0)} tiket`;
     const memberImagebuffers = [];
     const setlistImageBuffers = [];
-    const handshakeRanks = [];
-    const setlistRanks = [];
 
     if (handshakes.length > 0) {
       const length = handshakes.length > 3 ? 3 : handshakes.length;
@@ -90,7 +94,7 @@ app.post('/', async (req, res, next) => {
 
     const image = await generateImage({
       hsDetailText,
-      hsImage: memberImagebuffers[0],
+      hsImage: memberImagebuffers[0] || membersJSON["Empty"],
       setlistDetailText,
       setlistImage: setlistImageBuffers[0],
       theaterCountText: totalAttendance.toString(),
@@ -104,9 +108,13 @@ app.post('/', async (req, res, next) => {
         resultUrl: `https://2020.ngidol.club/share/${slug}.html`
       });
     } else {
-      console.error(result);
+      res.status(500).send();
+      console.error(results);
     }
   } catch (error) {
+    console.log(login.username);
+    console.log(JSON.stringify(handshakeRanks));
+    console.log(JSON.stringify(setlistRanks));
     console.error(error);
     if (error.message === "Alamat email atau Kata kunci salah") {
       error.status = 400;
