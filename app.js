@@ -5,7 +5,10 @@ const cors = require('cors');
 const Login = require('./libraries/loginPage');
 const app = express();
 const fs = require('fs');
-const { createSlug, limitText } = require('./libraries/helpers');
+const {
+  createSlug,
+  limitText
+} = require('./libraries/helpers');
 const generateHTML = require('./libraries/html-generator');
 const {
   uploadFile
