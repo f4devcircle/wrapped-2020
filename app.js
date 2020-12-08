@@ -39,15 +39,16 @@ app.post('/', async (req, res, next) => {
     const username = login.username;
 
 
-    const totalAttendance = attendance.reduce((cur, val) => cur + val.sum, 0);
-    const totalHS = handshakes.reduce((cur, val) => cur + val.sum, 0);
+    const totalAttendance = `${attendance.reduce((cur, val) => cur + val.sum, 0)} kali`;
+    const totalHS = `${handshakes.reduce((cur, val) => cur + val.sum, 0)} tiket`;
     const memberImagebuffers = [];
     const setlistImageBuffers = [];
     const handshakeRanks = [];
     const setlistRanks = [];
 
     if (handshakes.length > 0) {
-      for (let i = 0; i < handshakes.length > 3 ? 3 : handshakes.length; i++) {
+      const length = handshakes.length > 3 ? 3 : handshakes.length;
+      for (let i = 0; i < length; i++) {
         const memberName = handshakes[i].name.split(' ').slice(0, 3).join(' ');
         memberImagebuffers.push(membersJSON[memberName]);
         handshakeRanks.push(`${memberName} - ${handshakes[i].sum} kali` || null);
@@ -65,7 +66,8 @@ app.post('/', async (req, res, next) => {
     }
 
     if (attendance.length > 0) {
-      for (let i = 0; i < attendance.length > 3 ? 3 : attendance.length; i++) {
+      const length = attendance.length > 3 ? 3 : attendance.length;
+      for (let i = 0; i < length; i++) {
         setlistImageBuffers.push(setlistJSON[attendance[i].showName] || null);
         setlistRanks.push(`${attendance[i].showName} - ${attendance[i].sum} kali` || null);
       }

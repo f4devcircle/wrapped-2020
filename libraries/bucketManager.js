@@ -2,7 +2,7 @@ const {
   Storage
 } = require('@google-cloud/storage');
 const storage = new Storage({
-  keyFile: './keyfile.json'
+  keyFilename: 'keyfile.json'
 });
 const bucket = storage.bucket('2020.ngidol.club');
 
