@@ -1,9 +1,7 @@
 const {
   Storage
 } = require('@google-cloud/storage');
-const storage = new Storage({
-  keyFilename: 'keyfile.json'
-});
+const storage = new Storage();
 const bucket = storage.bucket('2020.ngidol.club');
 
 module.exports.uploadFile = async (filename, contentType, buffer) => {
