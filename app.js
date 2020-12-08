@@ -40,7 +40,7 @@ app.get('/', function (req, res) {
   });
 });
 
-app.post('/login', async (req, res) => {
+app.post('/', async (req, res) => {
   try {
     const {
       email,
@@ -62,12 +62,29 @@ app.post('/login', async (req, res) => {
     const handshakeRanks = [];
     const setlistRanks = [];
 
-    for (let i = 0; i < 3; i++) {
-      const memberName = handshakes[i].name.split(' ').slice(0, 3).join(' ');
-      memberImagebuffers.push(membersJSON[memberName]);
-      setlistImageBuffers.push(setlistJSON[attendance[i].showName] || null);
-      handshakeRanks.push(`${memberName} - ${handshakes[i].sum} kali` || null);
-      setlistRanks.push(`${attendance[i].showName} - ${attendance[i].sum} kali` || null);
+    if (handshakes.length > 0) {
+      for (let i = 0; i < 3; i++) {
+        const memberName = handshakes[i].name.split(' ').slice(0, 3).join(' ');
+        memberImagebuffers.push(membersJSON[memberName]);
+        handshakeRanks.push(`${memberName} - ${handshakes[i].sum} kali` || null);
+      }
+    }
+
+    if (handshakes.length === 0) {
+      handshakeRanks.push('Tidak tersedia');
+      memberImagebuffers.push(membersJSON.Empty);
+    }
+
+    if (attendance.length === 0) {
+      setlistRanks.push('Tidak tersedia');
+      setlistImageBuffers.push(setlistJSON.Empty);
+    }
+
+    if (attendance.length > 0) {
+      for (let i = 0; i < 3; i++) {
+        setlistImageBuffers.push(setlistJSON[attendance[i].showName] || null);
+        setlistRanks.push(`${attendance[i].showName} - ${attendance[i].sum} kali` || null);
+      }
     }
 
     const slug = createSlug(username);
