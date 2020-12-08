@@ -44,7 +44,7 @@ class Login {
 
       const {
         document
-      } = (new JSDOM(page)).window;
+      } = (new JSDOM(resp.body)).window;
       this.username = document.querySelector('.pinx');
 
       if (resp.body.includes('salah')) {
