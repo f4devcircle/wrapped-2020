@@ -1,8 +1,5 @@
 const textToImage = require('text-to-image');
 const jimp = require('jimp');
-const {
-  write
-} = require('jimp');
 
 /**
  * Generate image for og:image, and write image into folder outputs

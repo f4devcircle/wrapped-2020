@@ -1,4 +1,5 @@
 const uuid = require('uuid').v4;
+const limitCharacters = require('limit-characters');
 
 const createSlug = (name) => {
 	const randomString = (uuid().split('-'))[4];
@@ -6,6 +7,9 @@ const createSlug = (name) => {
 	return slug;
 }
 
+const limitText = (originalText, length = 20) => limitCharacters({ text: originalText, length, more: '' });
+
 module.exports = {
 	createSlug,
+	limitText,
 };

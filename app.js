@@ -5,7 +5,7 @@ const cors = require('cors');
 const Login = require('./libraries/loginPage');
 const app = express();
 const fs = require('fs');
-const { createSlug } = require('./libraries/helpers');
+const { createSlug, limitText } = require('./libraries/helpers');
 const generateHTML = require('./libraries/html-generator');
 const { uploadFile } = require('./libraries/bucketManager');
 const generateImage = require('./libraries/image-generator');
@@ -51,7 +51,7 @@ app.post('/', async (req, res, next) => {
       for (let i = 0; i < length; i++) {
         const memberName = handshakes[i].name.split(' ').slice(0, 3).join(' ');
         memberImagebuffers.push(membersJSON[memberName]);
-        handshakeRanks.push(`${memberName} - ${handshakes[i].sum} kali` || null);
+        handshakeRanks.push(`${limitText(memberName)} - ${handshakes[i].sum} kali` || null);
       }
     }
 
