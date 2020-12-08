@@ -17,11 +17,11 @@ const isSetlistName = text => setlist.some(setlistTitle => text ? text.includes(
 const getSetlistName = text => setlist.find(setlistTitle => text.includes(setlistTitle));
 
 
-const {
-  bootstrap
-} = require('global-agent');
+// const {
+//   bootstrap
+// } = require('global-agent');
 const e = require('express');
-bootstrap();
+// bootstrap();
 
 
 class Login {

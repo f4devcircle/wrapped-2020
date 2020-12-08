@@ -1,6 +1,6 @@
 FROM node:lts
 WORKDIR /app
-COPY package*.json app/
+COPY package*.json ./
 RUN npm install --production
-COPY . .
-CMD [ "node", "/bin/www" ]
+COPY . /app/
+CMD [ "node", "/app/bin/www" ]
