@@ -20,6 +20,7 @@ const getSetlistName = text => setlist.find(setlistTitle => text.includes(setlis
 const {
   bootstrap
 } = require('global-agent');
+const e = require('express');
 bootstrap();
 
 
@@ -42,19 +43,20 @@ class Login {
         },
       });
 
+      if (resp.body.includes('salah')) {
+        throw new Error("Alamat email atau Kata kunci salah");
+      }
+
       const {
         document
       } = (new JSDOM(resp.body)).window;
       this.username = document.querySelector('.pinx').innerHTML;
 
-      if (resp.body.includes('salah')) {
-        throw new Error("Alamat email atau Kata kunci salah");
-      }
     } catch (e) {
       if (e && e.options) {
         console.error(e.options);
       } else {
-        console.error(e);
+        throw e;
       }
     }
   }
@@ -68,7 +70,7 @@ class Login {
       if (error && error.options) {
         console.error(error.options);
       } else {
-        console.error(error);
+        throw error;
       }
     }
   }
@@ -82,7 +84,7 @@ class Login {
       if (error && error.options) {
         console.error(error.options);
       } else {
-        console.error(error);
+        throw error;
       }
     }
   }
@@ -96,7 +98,7 @@ class Login {
       if (error && error.options) {
         console.error(error.options);
       } else {
-        console.error(error);
+        throw error;
       }
     }
   }

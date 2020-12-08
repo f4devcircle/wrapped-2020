@@ -40,7 +40,7 @@ app.get('/', function (req, res) {
   });
 });
 
-app.post('/', async (req, res) => {
+app.post('/', async (req, res, next) => {
   try {
     const {
       email,
@@ -122,6 +122,10 @@ app.post('/', async (req, res) => {
     }
   } catch (error) {
     console.error(error);
+    if (error.message === "Alamat email atau Kata kunci salah") {
+      error.status = 400;
+      next(error);
+    }
   }
 });
 
@@ -138,7 +142,7 @@ app.use(function (err, req, res, next) {
   console.log(err);
   res.status(err.status || 500);
   res.json({
-    error: err,
+    msg: err.message,
   });
 });
 
