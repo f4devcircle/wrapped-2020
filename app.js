@@ -52,6 +52,7 @@ app.post('/login', async (req, res) => {
     const pages = await Promise.all([login.getTicketList(), login.getEventlist(), login.getHandshakeList()]);
     const attendance = login.combineShows(login.parseShowTickets(pages[0]), login.parseEvents(pages[1]));
     const handshakes = login.parseHandshake(pages[2]);
+    const username = login.username;
 
 
     const totalAttendance = attendance.reduce((cur, val) => cur + val.sum, 0);
@@ -69,10 +70,10 @@ app.post('/login', async (req, res) => {
       setlistRanks.push(`${attendance[i].showName} - ${attendance[i].sum} kali` || null);
     }
 
-    const slug = createSlug('naskapal');
+    const slug = createSlug(username);
     const html = await generateHTML({
       slug,
-      name: 'naskapal',
+      name: username,
       hsCountText: totalHS,
       setlistCountText: totalAttendance,
       hsImages: memberImagebuffers,
@@ -91,7 +92,7 @@ app.post('/login', async (req, res) => {
       setlistImage: setlistImageBuffers[0],
       theaterCountText: totalAttendance.toString(),
       hsCountText: totalHS.toString(),
-      userNameText: 'naskapal'
+      userNameText: username
     });
 
     const results = await Promise.all([uploadFile(`share/${slug}.png`, 'image/png', Buffer.from(image)), uploadFile(`share/${slug}.html`, 'text/html', Buffer.from(html))]);
