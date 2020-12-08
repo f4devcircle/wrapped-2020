@@ -59,7 +59,7 @@ const generateImage = async (data) => {
 
   const baseImage = await jimp.read('./assets/base.png');
   const hsImage = await jimp.read(Buffer.from(data.hsImage, 'base64'))
-  const setlistImage = await jjimp.read(Buffer.from(data.setlistImage, 'base64'))
+  const setlistImage = await jimp.read(Buffer.from(data.setlistImage, 'base64'))
 
   hsImage.crop(0, 0, hsImage.getWidth(), hsImage.getWidth())
     .circle();
@@ -74,7 +74,7 @@ const generateImage = async (data) => {
     .composite(await jimp.read(Buffer.from((hsCount.split(','))[1], 'base64')), 824, 135)
     .composite(await jimp.read(Buffer.from((theaterCount.split(','))[1], 'base64')), 824, 275)
     .composite(await jimp.read(Buffer.from((userName.split(','))[1], 'base64')), 145, 585)
-    .getBuffer(jimp.MIME_PNG);
+    .getBufferAsync(jimp.MIME_PNG);
 
   return image;
 };
