@@ -1,11 +1,6 @@
-require('dotenv').config();
 const got = require('got');
-const {
-  CookieJar
-} = require('tough-cookie');
-const {
-  JSDOM
-} = require('jsdom');
+const { CookieJar } = require('tough-cookie');
+const { JSDOM } = require('jsdom');
 
 const ticketListUrl = 'mypage/ticket-list?lang=id';
 const eventListUrl = 'mypage/event-list?lang=id';
@@ -15,14 +10,6 @@ const setlist = ['Saka Agari', 'Matahari Milikku', 'Pajama Drive', 'Fajar Sang I
 
 const isSetlistName = text => setlist.some(setlistTitle => text ? text.includes(setlistTitle) : '');
 const getSetlistName = text => setlist.find(setlistTitle => text.includes(setlistTitle));
-
-
-// const {
-//   bootstrap
-// } = require('global-agent');
-const e = require('express');
-// bootstrap();
-
 
 class Login {
   constructor() {
@@ -47,9 +34,7 @@ class Login {
         throw new Error("Alamat email atau Kata kunci salah");
       }
 
-      const {
-        document
-      } = (new JSDOM(resp.body)).window;
+      const { document } = (new JSDOM(resp.body)).window;
       this.username = document.querySelector('.pinx').innerHTML;
 
     } catch (e) {
@@ -61,9 +46,9 @@ class Login {
     }
   }
 
-  async getTicketList() {
+  getTicketList() {
     try {
-      return await this.req.get(ticketListUrl, {
+      return this.req.get(ticketListUrl, {
         resolveBodyOnly: true
       });
     } catch (error) {
@@ -75,9 +60,9 @@ class Login {
     }
   }
 
-  async getEventlist() {
+  getEventlist() {
     try {
-      return await this.req.get(eventListUrl, {
+      return this.req.get(eventListUrl, {
         resolveBodyOnly: true
       });
     } catch (error) {
@@ -89,9 +74,9 @@ class Login {
     }
   }
 
-  async getHandshakeList() {
+  getHandshakeList() {
     try {
-      return await this.req(handshakeUrl, {
+      return this.req(handshakeUrl, {
         resolveBodyOnly: true
       });
     } catch (error) {

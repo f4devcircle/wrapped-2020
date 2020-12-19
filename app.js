@@ -10,9 +10,7 @@ const {
   limitText
 } = require('./libraries/helpers');
 const generateHTML = require('./libraries/html-generator');
-const {
-  uploadFile
-} = require('./libraries/bucketManager');
+const { uploadFile } = require('./libraries/bucketManager');
 const generateImage = require('./libraries/image-generator');
 
 const membersJSON = JSON.parse(fs.readFileSync('./members.json', 'utf-8'));
@@ -40,7 +38,11 @@ app.post('/', async (req, res, next) => {
     } = req.body;
 
     await login.login(email, password);
-    const pages = await Promise.all([login.getTicketList(), login.getEventlist(), login.getHandshakeList()]);
+    const pages = await Promise.all([
+      login.getTicketList(),
+      login.getEventlist(),
+      login.getHandshakeList()
+    ]);
     const attendance = login.combineShows(login.parseShowTickets(pages[0]), login.parseEvents(pages[1]));
     const handshakes = login.parseHandshake(pages[2]);
     const username = login.username;
@@ -58,16 +60,9 @@ app.post('/', async (req, res, next) => {
         memberImagebuffers.push(membersJSON[memberName]);
         handshakeRanks.push(`${limitText(memberName)} - ${handshakes[i].sum} kali` || null);
       }
-    }
-
-    if (handshakes.length === 0) {
+    } else {
       handshakeRanks.push('Tidak tersedia');
       memberImagebuffers.push(membersJSON.Empty);
-    }
-
-    if (attendance.length === 0) {
-      setlistRanks.push('Tidak tersedia');
-      setlistImageBuffers.push(setlistJSON.Empty);
     }
 
     if (attendance.length > 0) {
@@ -76,6 +71,9 @@ app.post('/', async (req, res, next) => {
         setlistImageBuffers.push(setlistJSON[attendance[i].showName] || null);
         setlistRanks.push(`${attendance[i].showName} - ${attendance[i].sum} kali` || null);
       }
+    } else {
+      setlistRanks.push('Tidak tersedia');
+      setlistImageBuffers.push(setlistJSON.Empty);
     }
 
     const slug = createSlug(username);
@@ -103,7 +101,10 @@ app.post('/', async (req, res, next) => {
       userNameText: username
     });
 
-    const results = await Promise.all([uploadFile(`share/${slug}.png`, 'image/png', Buffer.from(image)), uploadFile(`share/${slug}.html`, 'text/html', Buffer.from(html))]);
+    const results = await Promise.all([
+      uploadFile(`share/${slug}.png`, 'image/png', Buffer.from(image)),
+      uploadFile(`share/${slug}.html`, 'text/html', Buffer.from(html))
+    ]);
     if (results) {
       res.send({
         resultUrl: `https://2020.ngidol.club/share/${slug}.html`
