@@ -18,6 +18,9 @@ const generateImage = require('./libraries/image-generator');
 const membersJSON = JSON.parse(fs.readFileSync('./members.json', 'utf-8'));
 const setlistJSON = JSON.parse(fs.readFileSync('./setlists.json', 'utf-8'));
 
+const ticketListUrl = 'mypage/ticket-list?';
+const eventListUrl = 'mypage/event-list?';
+
 app.use(cors());
 app.use(helmet());
 app.use(compression());
@@ -40,8 +43,29 @@ app.post('/', async (req, res, next) => {
     } = req.body;
 
     await login.login(email, password);
-    const pages = await Promise.all([login.getTicketList(), login.getEventlist(), login.getHandshakeList()]);
-    const attendance = login.combineShows(login.parseShowTickets(pages[0]), login.parseEvents(pages[1]));
+    const pages = await Promise.all([login.getPage(ticketListUrl), login.getPage(eventListUrl), login.getHandshakeList()]);
+    const showTickets = [pages[0]];
+    const events = [pages[1]];
+    let ticketListNextPage;
+    let eventNextPage;
+    let i = 0;
+    do {
+      ticketListNextPage = login.hasNextPage(showTickets[i]);
+      eventNextPage = login.hasNextPage(events[i]);
+      if (ticketListNextPage) showTickets.push(await login.getPage(`${ticketListUrl}page=${i+2}`));
+      if (eventNextPage) events.push(await login.getPage(`${eventListUrl}page=${i+2}`));
+      i++;
+    } while (ticketListNextPage || eventNextPage);
+
+    const watchedShows = showTickets.map(show => {
+      return login.parseShowTickets(show);
+    })
+
+    const watchedEvents = events.map(event => {
+      return login.parseEvents(event);
+    })
+
+    const attendance = login.combineShows(watchedShows, watchedEvents);
     const handshakes = login.parseHandshake(pages[2]);
     const username = login.username;
 
@@ -103,10 +127,11 @@ app.post('/', async (req, res, next) => {
       userNameText: username
     });
 
-    const results = await Promise.all([uploadFile(`share/${slug}.png`, 'image/png', Buffer.from(image)), uploadFile(`share/${slug}.html`, 'text/html', Buffer.from(html))]);
+    fs.writeFileSync(`./share/${slug}.png`, image);
+    const results = true // await Promise.all([uploadFile(`share/${slug}.png`, 'image/png', Buffer.from(image)), uploadFile(`share/${slug}.html`, 'text/html', Buffer.from(html))]);
     if (results) {
       res.send({
-        resultUrl: `https://2020.ngidol.club/share/${slug}.html`
+        resultUrl: `https://2021.ngidol.club/share/${slug}.html`
       });
     } else {
       res.status(500).send();
