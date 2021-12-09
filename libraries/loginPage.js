@@ -11,7 +11,7 @@ const fs = require('fs');
 
 const handshakeUrl = 'mypage/handshake-session?lang=id'
 
-const setlist = ['Cara Meminum Ramune', 'Fly! Team T', 'Aturan Anti Cinta', 'Gadis Gadis Remaja', 'Tunas di Balik Seragam'];
+const setlist = ['Cara Meminum Ramune', 'Fly! Team T', 'Aturan Anti Cinta', 'Gadis Gadis Remaja', 'Tunas di Balik Seragam', 'Fajar Sang Idola'];
 const CURRENT_YEAR = 2021;
 const isSetlistName = text => setlist.some(setlistTitle => text ? text.includes(setlistTitle) : '');
 const getSetlistName = text => setlist.find(setlistTitle => text.includes(setlistTitle));
@@ -164,16 +164,24 @@ class Login {
   }
 
   combineShows(shows, events) {
-    const showNamesArr = shows.map(show => Object.keys(show)).reduce( (prev, cur) => cur ? prev.concat(cur) : prev, [] );
-    // const showNamesArr = Object.keys(shows).concat(Object.keys(events));
-    const showNames = new Set(shows);
+    let combinedShows = [];
+    shows.forEach(show => {
+      combinedShows = combinedShows.concat(Object.keys(show));
+    })
+    const showSummary = {};
     const summary = [];
-    showNames.forEach(showName => {
-      summary.push({
-        showName,
-        sum: (shows[showName] || null) + (events[showName] || null) // so that it not return undefined if not found
-      })
+    shows.forEach(show => {
+      for(const key in show) {
+        showSummary[key] ? showSummary[key] += show[key] : showSummary[key] = show[key];
+      }
     });
+
+    for (const key in showSummary) {
+      summary.push({
+        showName: key,
+        sum: showSummary[key]
+      });
+    };
 
     summary.sort((a, b) => b.sum - a.sum);
     return summary;
