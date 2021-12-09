@@ -11,7 +11,7 @@ const fs = require('fs');
 
 const handshakeUrl = 'mypage/handshake-session?lang=id'
 
-const setlist = ['Cara Meminum Ramune', 'Fly! Team T', 'Aturan Anti Cinta', 'Gadis Gadis Remaja', 'Tunas di Balik Seragam', 'Fajar Sang Idola'];
+const setlist = ['Cara Meminum Ramune', 'Fly! Team T', 'Aturan Anti Cinta', 'Gadis Gadis Remaja', 'Tunas di Balik Seragam', 'Fajar Sang Idola', 'Pajama Drive'];
 const CURRENT_YEAR = 2021;
 const isSetlistName = text => setlist.some(setlistTitle => text ? text.includes(setlistTitle) : '');
 const getSetlistName = text => setlist.find(setlistTitle => text.includes(setlistTitle));
