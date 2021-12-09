@@ -20,6 +20,7 @@ const setlistJSON = JSON.parse(fs.readFileSync('./setlists.json', 'utf-8'));
 
 const ticketListUrl = 'mypage/ticket-list?';
 const eventListUrl = 'mypage/event-list?';
+const pointHistoryUrl = 'mypage/point-history?';
 
 app.use(cors());
 app.use(helmet());
@@ -43,19 +44,23 @@ app.post('/', async (req, res, next) => {
     } = req.body;
 
     await login.login(email, password);
-    const pages = await Promise.all([login.getPage(ticketListUrl), login.getPage(eventListUrl), login.getHandshakeList()]);
+    const pages = await Promise.all([login.getPage(ticketListUrl), login.getPage(eventListUrl), login.getHandshakeList()], login.getPage(pointHistoryUrl));
     const showTickets = [pages[0]];
     const events = [pages[1]];
+    const points = [pages[3]];
     let ticketListNextPage;
     let eventNextPage;
+    let pointsNextPage;
     let i = 0;
     do {
       ticketListNextPage = login.hasNextPage(showTickets[i]);
       eventNextPage = login.hasNextPage(events[i]);
+      pointsNextPage = login.hasNextPage(points[i]);
       if (ticketListNextPage) showTickets.push(await login.getPage(`${ticketListUrl}page=${i+2}`));
       if (eventNextPage) events.push(await login.getPage(`${eventListUrl}page=${i+2}`));
+      if (pointsNextPage) points.push(await login.getPage(`${eventListUrl}page=${i+2}`));
       i++;
-    } while (ticketListNextPage || eventNextPage);
+    } while (ticketListNextPage || eventNextPage || pointsNextPage);
 
     const watchedShows = showTickets.map(show => {
       return login.parseShowTickets(show);
