@@ -44,7 +44,7 @@ app.post('/', async (req, res, next) => {
     } = req.body;
 
     await login.login(email, password);
-    const pages = await Promise.all([login.getPage(ticketListUrl), login.getPage(eventListUrl), login.getHandshakeList()], login.getPage(pointHistoryUrl));
+    const pages = await Promise.all([login.getPage(ticketListUrl), login.getPage(eventListUrl), login.getHandshakeList(), login.getPage(pointHistoryUrl)]);
     const showTickets = [pages[0]];
     const events = [pages[1]];
     const points = [pages[3]];
@@ -58,7 +58,7 @@ app.post('/', async (req, res, next) => {
       pointsNextPage = login.hasNextPage(points[i]);
       if (ticketListNextPage) showTickets.push(await login.getPage(`${ticketListUrl}page=${i+2}`));
       if (eventNextPage) events.push(await login.getPage(`${eventListUrl}page=${i+2}`));
-      if (pointsNextPage) points.push(await login.getPage(`${eventListUrl}page=${i+2}`));
+      if (pointsNextPage) points.push(await login.getPage(`${pointHistoryUrl}page=${i+2}`));
       i++;
     } while (ticketListNextPage || eventNextPage || pointsNextPage);
 
@@ -70,8 +70,13 @@ app.post('/', async (req, res, next) => {
       return login.parseEvents(event);
     })
 
+    const point = points.map(point => {
+      return login.parsePoints(point);
+    })
+
     const attendance = login.combineShows(watchedShows, watchedEvents);
     const handshakes = login.parseHandshake(pages[2]);
+    const totalPoints = login.parseTransactions();
     const username = login.username;
 
 
