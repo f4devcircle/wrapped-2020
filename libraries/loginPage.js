@@ -163,6 +163,42 @@ class Login {
     }
   }
 
+  parsePoints(page) {
+    const {
+      document
+    } = (new JSDOM(page)).window;
+
+    const rows = Array.from(document.querySelectorAll('tr'));
+    rows.shift();
+
+    const pointHistory = rows.map(row => {
+      const datas = Array.from(row.querySelectorAll('td'));
+      const date = datas[2].innerHTML;
+      const year = date.split(' ')[2];
+      const changes = datas[5].innerHTML;
+      const processedText = changes.split('<br>');
+      const bonusPoint = processedText[0].split('Bonus:')[1].trim();
+      const bonusPointClean = bonusPoint.substring(1).split('P')[0].trim().replace(/,/g, '');
+      const point = processedText[1].split('Buy:')[1].trim();
+      const pointOperation = isNaN(point.split('').shift()) ? point.split('').shift() : '';
+      const bonusPointOperation = isNaN(bonusPoint.split('').shift()) ? bonusPoint.split('').shift() : '';
+      const pointClean = point.substring(1).split('P')[0].trim().replace(/,/g, '');
+
+      const bonusPointNumber = Number(bonusPointClean);
+      const pointNumber = Number(pointClean);
+      
+      return {
+        year,
+        pointOperation,
+        bonusPointOperation,
+        bonusPointNumber,
+        pointNumber
+      }
+    })
+    
+    return pointHistory;
+  }
+
   combineShows(shows, events) {
     let combinedShows = [];
     shows.forEach(show => {
