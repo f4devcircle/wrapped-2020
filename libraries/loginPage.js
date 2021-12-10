@@ -229,8 +229,8 @@ class Login {
         document
       } = (new JSDOM(page)).window;
       // to get table id, because jeketi categorizes based on id, for VC, id is sepearated by day
-      const firstHandshakeId = 150;
-      const lastHandshakeId = 246;
+      const firstHandshakeId = Number(process.env.FIRST_HANDSHAKE_ID);
+      const lastHandshakeId = Number(process.env.LAST_HANDSHAKE_ID);
       const members = {};
       const membersArr = [];
 
@@ -243,12 +243,14 @@ class Login {
           rows.shift();
           rows.forEach(row => {
             const tableDatas = row.querySelectorAll('td');
-            const memberName = tableDatas[tableDatas.length - 3].innerHTML;
-            const amount = tableDatas[tableDatas.length - 2].innerHTML;
-            if (members[memberName]) {
-              members[memberName] += Number(amount);
-            } else if (memberName === '-') {} else {
-              members[memberName] = Number(amount);
+            if (tableDatas.length > 1) {
+              const memberName = tableDatas[tableDatas.length - 3].innerHTML;
+              const amount = tableDatas[tableDatas.length - 2].innerHTML;
+              if (members[memberName]) {
+                members[memberName] += Number(amount);
+              } else if (memberName === '-') {} else {
+                members[memberName] = Number(amount);
+              }
             }
           })
         }
