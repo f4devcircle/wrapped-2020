@@ -7,22 +7,15 @@ const {
   JSDOM
 } = require('jsdom');
 
-const ticketListUrl = 'mypage/ticket-list?lang=id';
-const eventListUrl = 'mypage/event-list?lang=id';
+const fs = require('fs');
+
 const handshakeUrl = 'mypage/handshake-session?lang=id'
 
-const setlist = ['Saka Agari', 'Matahari Milikku', 'Pajama Drive', 'Fajar Sang Idola', 'Cara Meminum Ramune', 'Fly! Team T'];
-
+const setlist = ['Cara Meminum Ramune', 'Fly! Team T', 'Aturan Anti Cinta', 'Gadis Gadis Remaja', 'Tunas di Balik Seragam', 'Fajar Sang Idola', 'Pajama Drive'];
+const CURRENT_YEAR = 2021;
 const isSetlistName = text => setlist.some(setlistTitle => text ? text.includes(setlistTitle) : '');
 const getSetlistName = text => setlist.find(setlistTitle => text.includes(setlistTitle));
-
-
-// const {
-//   bootstrap
-// } = require('global-agent');
-const e = require('express');
-// bootstrap();
-
+const sanitizeName = name => name.split('<')[1].split(',')[1].trim();
 
 class Login {
   constructor() {
@@ -32,6 +25,23 @@ class Login {
       cookieJar
     })
     this.username = '';
+  }
+
+  hasNextPage = page => {
+    try {
+      const {
+        document
+      } = (new JSDOM(page)).window;
+    
+      const nextElement = document.querySelector('.next');
+      const nextLink = nextElement.querySelector('a');
+    
+      if (nextLink) return true;
+      return false;
+    } catch (e) {
+      console.log('element not found for function hasNextPage, returning false')
+      return false;
+    }
   }
 
   async login(email, password) {
@@ -47,10 +57,13 @@ class Login {
         throw new Error("Alamat email atau Kata kunci salah");
       }
 
+      fs.writeFileSync('./response.html', resp.body);
+
       const {
         document
       } = (new JSDOM(resp.body)).window;
-      this.username = document.querySelector('.pinx').innerHTML;
+      const usernameElement = document.querySelector('.header-global__sp--header').innerHTML
+      this.username = sanitizeName(usernameElement);
 
     } catch (e) {
       if (e && e.options) {
@@ -61,23 +74,9 @@ class Login {
     }
   }
 
-  async getTicketList() {
+  async getPage(link) {
     try {
-      return await this.req.get(ticketListUrl, {
-        resolveBodyOnly: true
-      });
-    } catch (error) {
-      if (error && error.options) {
-        console.error(error.options);
-      } else {
-        throw error;
-      }
-    }
-  }
-
-  async getEventlist() {
-    try {
-      return await this.req.get(eventListUrl, {
+      return await this.req.get(link, {
         resolveBodyOnly: true
       });
     } catch (error) {
@@ -110,15 +109,17 @@ class Login {
         document
       } = (new JSDOM(page)).window;
 
+      fs.writeFileSync('./shows.html', page);
+
       const rows = Array.from(document.querySelectorAll('tr'));
       rows.shift();
 
       rows.forEach(row => {
         const datas = Array.from(row.querySelectorAll('td'));
-        const date = datas[2].innerHTML;
+        const date = datas[1].innerHTML;
         const year = date.split(' ')[2];
-        const showName = datas[1].innerHTML;
-        if (year == 2020) {
+        const showName = datas[2].innerHTML;
+        if (year == CURRENT_YEAR) {
           if (watchedShows[showName]) {
             watchedShows[showName] += 1;
           } else if (isSetlistName(showName)) {
@@ -146,7 +147,7 @@ class Login {
         const datas = Array.from(row.querySelectorAll('td'));
         const date = datas[2].innerHTML;
         const year = date.split(' ')[2];
-        if (year == 2020) {
+        if (year == CURRENT_YEAR) {
           const showName = getSetlistName(datas[1].innerHTML);
           if (watchedShows[showName]) {
             watchedShows[showName] += 1;
@@ -162,16 +163,61 @@ class Login {
     }
   }
 
+  parsePoints(page) {
+    const {
+      document
+    } = (new JSDOM(page)).window;
+
+    const rows = Array.from(document.querySelectorAll('tr'));
+    rows.shift();
+
+    const pointHistory = rows.map(row => {
+      const datas = Array.from(row.querySelectorAll('td'));
+      const date = datas[2].innerHTML;
+      const year = date.split(' ')[2];
+      const changes = datas[5].innerHTML;
+      const processedText = changes.split('<br>');
+      const bonusPoint = processedText[0].split('Bonus:')[1].trim();
+      const bonusPointClean = bonusPoint.substring(1).split('P')[0].trim().replace(/,/g, '');
+      const point = processedText[1].split('Buy:')[1].trim();
+      const pointOperation = isNaN(point.split('').shift()) ? point.split('').shift() : '';
+      const bonusPointOperation = isNaN(bonusPoint.split('').shift()) ? bonusPoint.split('').shift() : '';
+      const pointClean = point.substring(1).split('P')[0].trim().replace(/,/g, '');
+
+      const bonusPointNumber = Number(bonusPointClean);
+      const pointNumber = Number(pointClean);
+      
+      return {
+        year,
+        pointOperation,
+        bonusPointOperation,
+        bonusPointNumber,
+        pointNumber
+      }
+    })
+    
+    return pointHistory;
+  }
+
   combineShows(shows, events) {
-    const showNamesArr = Object.keys(shows).concat(Object.keys(events));
-    const showNames = new Set(showNamesArr);
+    let combinedShows = [];
+    shows.forEach(show => {
+      combinedShows = combinedShows.concat(Object.keys(show));
+    })
+    const showSummary = {};
     const summary = [];
-    showNames.forEach(showName => {
-      summary.push({
-        showName,
-        sum: (shows[showName] || null) + (events[showName] || null) // so that it not return undefined if not found
-      })
+    shows.forEach(show => {
+      for(const key in show) {
+        showSummary[key] ? showSummary[key] += show[key] : showSummary[key] = show[key];
+      }
     });
+
+    for (const key in showSummary) {
+      summary.push({
+        showName: key,
+        sum: showSummary[key]
+      });
+    };
 
     summary.sort((a, b) => b.sum - a.sum);
     return summary;
@@ -183,10 +229,12 @@ class Login {
         document
       } = (new JSDOM(page)).window;
       // to get table id, because jeketi categorizes based on id, for VC, id is sepearated by day
-      const firstHandshakeId = 68;
-      const lastHandshakeId = 147;
+      const firstHandshakeId = 150;
+      const lastHandshakeId = 246;
       const members = {};
       const membersArr = [];
+
+      fs.writeFileSync('./handshakes.html', page);
 
       for (let id = firstHandshakeId; id <= lastHandshakeId; id++) {
         const table = document.querySelector(`#handshake${id}`);
