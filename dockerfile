@@ -1,6 +1,21 @@
-FROM node:lts
+FROM node:16-alpine
+
 WORKDIR /app
-COPY package*.json ./
-RUN npm install --production
+
+RUN apk add --update --no-cache \
+    make \
+    g++ \
+    jpeg-dev \
+    cairo-dev \
+    giflib-dev \
+    pango-dev \
+    libtool \
+    autoconf \
+    automake
+
+COPY package.json ./
+
+RUN npm install
+
 COPY . /app/
-CMD [ "node", "/app/bin/www" ]
+CMD ["node", "/app/bin/www"]
