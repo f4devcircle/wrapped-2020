@@ -76,7 +76,7 @@ app.post('/', async (req, res, next) => {
 
     const attendance = login.combineShows(watchedShows, watchedEvents);
     const handshakes = login.parseHandshake(pages[2]);
-    const totalPoints = login.parseTransactions();
+    // const totalPoints = login.parseTransactions();
     const username = login.username;
 
 
