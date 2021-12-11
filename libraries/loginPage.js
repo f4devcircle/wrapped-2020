@@ -39,7 +39,6 @@ class Login {
       if (nextLink) return true;
       return false;
     } catch (e) {
-      console.log('element not found for function hasNextPage, returning false')
       return false;
     }
   }
@@ -191,12 +190,39 @@ class Login {
         year,
         pointOperation,
         bonusPointOperation,
-        bonusPointNumber,
-        pointNumber
+        bonusPointAmount: bonusPointNumber,
+        pointAmount: pointNumber
       }
     })
     
     return pointHistory;
+  }
+
+  calculatePoints(points) {
+    const totalPoints = points.reduce((prev, cur) => {
+      if (cur.pointOperation === '-') {
+        return prev;
+      } else if (cur.pointOperation === '+') {
+        return prev + cur.pointAmount;
+      } else {
+        return prev;
+      }
+    }, 0);
+
+    const totalBonusPoints = points.reduce((prev, cur) => {
+      if (cur.bonusPointOperation === '-') {
+        return prev;
+      } else if (cur.bonusPointOperation === '+') {
+        return prev + cur.bonusPointAmount;
+      } else {
+        return prev;
+      }
+    }, 0);
+
+    return {
+      totalPoints,
+      totalBonusPoints
+    }
   }
 
   combineShows(shows, events) {
