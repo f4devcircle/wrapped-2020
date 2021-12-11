@@ -15,6 +15,8 @@ const {
   uploadFile
 } = require('./libraries/bucketManager');
 const generateImage = require('./libraries/image-generator');
+const uuid = require('uuid').v4;
+
 
 const membersJSON = JSON.parse(fs.readFileSync('./members.json', 'utf-8'));
 const setlistJSON = JSON.parse(fs.readFileSync('./setlists.json', 'utf-8'));
@@ -35,6 +37,11 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: true
 }))
+
+app.use((req, res, next) => {
+  req.uuid = uuid();
+  next();
+})
 
 app.post('/', async (req, res, next) => {
   const handshakeRanks = [];
@@ -154,7 +161,7 @@ app.post('/', async (req, res, next) => {
       console.error(results);
     }
   } catch (error) {
-    console.log(login.username);
+    console.log(`${req.uuid}: ${login.username}`);
     console.error(error);
     if (error.message === "Alamat email atau Kata kunci salah") {
       error.status = 400;
@@ -165,7 +172,7 @@ app.post('/', async (req, res, next) => {
 
 app.use(function (req, res, next) {
   const err = new Error('not found');
-  console.log(`request url '${req.originalUrl}' not found`)
+  console.log(`${req.uuid}: request url '${req.originalUrl}' not found`)
   err.status = 404;
   next(err);
 });
@@ -174,7 +181,7 @@ app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  console.log(err);
+  console.log(`${req.uuid}: ${err}`);
   res.status(err.status || 500);
   res.json({
     msg: err.message,
