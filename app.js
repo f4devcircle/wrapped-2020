@@ -147,7 +147,7 @@ app.post('/', async (req, res, next) => {
     const results = await Promise.all([uploadFile(`share/${slug}.png`, 'image/png', Buffer.from(image)), uploadFile(`share/${slug}.html`, 'text/html', Buffer.from(html))]);
     if (results) {
       res.send({
-        resultUrl: `https://2020.ngidol.club/share/${slug}.html`
+        resultUrl: `https://${YEAR}.ngidol.club/share/${slug}.html`
       });
     } else {
       res.status(500).send();
