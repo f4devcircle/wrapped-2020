@@ -137,6 +137,7 @@ app.post('/', async (req, res, next) => {
       userNameText: username
     });
 
+    fs.writeFileSync(`./share/${slug}.html`, html);
     fs.writeFileSync(`./share/${slug}.png`, image);
     const results = await Promise.all([uploadFile(`share/${slug}.png`, 'image/png', Buffer.from(image)), uploadFile(`share/${slug}.html`, 'text/html', Buffer.from(html))]);
     if (results) {
@@ -149,8 +150,6 @@ app.post('/', async (req, res, next) => {
     }
   } catch (error) {
     console.log(login.username);
-    console.log(JSON.stringify(handshakeRanks));
-    console.log(JSON.stringify(setlistRanks));
     console.error(error);
     if (error.message === "Alamat email atau Kata kunci salah") {
       error.status = 400;
@@ -161,6 +160,7 @@ app.post('/', async (req, res, next) => {
 
 app.use(function (req, res, next) {
   const err = new Error('not found');
+  console.log(`request url '${req.originalUrl}' not found`)
   err.status = 404;
   next(err);
 });
