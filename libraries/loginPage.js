@@ -12,7 +12,7 @@ const fs = require('fs');
 const handshakeUrl = 'mypage/handshake-session?lang=id'
 
 const setlist = ['Cara Meminum Ramune', 'Fly! Team T', 'Aturan Anti Cinta', 'Gadis Gadis Remaja', 'Tunas di Balik Seragam', 'Fajar Sang Idola', 'Pajama Drive'];
-const CURRENT_YEAR = process.env.YEAR;
+const YEAR = process.env.YEAR;
 const isSetlistName = text => setlist.some(setlistTitle => text ? text.includes(setlistTitle) : '');
 const getSetlistName = text => setlist.find(setlistTitle => text.includes(setlistTitle));
 const sanitizeName = name => name.split('<')[1].split(',')[1].trim();
@@ -118,7 +118,7 @@ class Login {
         const date = datas[1].innerHTML;
         const year = date.split(' ')[2];
         const showName = datas[2].innerHTML;
-        if (year == CURRENT_YEAR) {
+        if (year == YEAR) {
           if (watchedShows[showName]) {
             watchedShows[showName] += 1;
           } else if (isSetlistName(showName)) {
@@ -146,7 +146,7 @@ class Login {
         const datas = Array.from(row.querySelectorAll('td'));
         const date = datas[2].innerHTML;
         const year = date.split(' ')[2];
-        if (year == CURRENT_YEAR) {
+        if (year == YEAR) {
           const showName = getSetlistName(datas[1].innerHTML);
           if (watchedShows[showName]) {
             watchedShows[showName] += 1;
@@ -260,27 +260,35 @@ class Login {
       const members = {};
       const membersArr = [];
 
-      fs.writeFileSync('./handshakes.html', page);
+      const elements = document.querySelectorAll('h4');
 
-      for (let id = firstHandshakeId; id <= lastHandshakeId; id++) {
-        const table = document.querySelector(`#handshake${id}`);
-        if (table) {
-          const rows = table ? Array.from(table.querySelectorAll('tr')) : null;
-          rows.shift();
-          rows.forEach(row => {
-            const tableDatas = row.querySelectorAll('td');
-            if (tableDatas.length > 1) {
-              const memberName = tableDatas[tableDatas.length - 3].innerHTML;
-              const amount = tableDatas[tableDatas.length - 2].innerHTML;
-              if (members[memberName]) {
-                members[memberName] += Number(amount);
-              } else if (memberName === '-') {} else {
-                members[memberName] = Number(amount);
+      elements.forEach(elem => {
+
+        if (elem.innerHTML.includes(YEAR)) {
+          const processYear = elem.innerHTML.split('handshake');
+          const year = processYear[1].split("'");
+          const id = year[0];
+      
+          const table = document.querySelector(`#handshake${id}`);
+          if (table) {
+            const rows = table ? Array.from(table.querySelectorAll('tr')) : null;
+            rows.shift();
+            rows.forEach(row => {
+              const tableDatas = row.querySelectorAll('td');
+              if (tableDatas.length > 1) {
+                const memberName = tableDatas[tableDatas.length - 3].innerHTML;
+                const amount = tableDatas[tableDatas.length - 2].innerHTML;
+                if (members[memberName]) {
+                  members[memberName] += Number(amount);
+                } else if (memberName === '-') {} else {
+                  members[memberName] = Number(amount);
+                }
               }
-            }
-          })
+            })
+          }
         }
-      }
+      
+      })
 
       for (let key in members) {
         membersArr.push({
