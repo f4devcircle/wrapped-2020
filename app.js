@@ -5,6 +5,7 @@ const cors = require('cors');
 const Login = require('./libraries/loginPage');
 const app = express();
 const fs = require('fs');
+const flatten = require('lodash.flatten');
 const {
   createSlug,
   limitText
@@ -21,6 +22,8 @@ const setlistJSON = JSON.parse(fs.readFileSync('./setlists.json', 'utf-8'));
 const ticketListUrl = 'mypage/ticket-list?';
 const eventListUrl = 'mypage/event-list?';
 const pointHistoryUrl = 'mypage/point-history?';
+
+const YEAR = process.env.YEAR;
 
 app.use(cors());
 app.use(helmet());
@@ -76,7 +79,9 @@ app.post('/', async (req, res, next) => {
 
     const attendance = login.combineShows(watchedShows, watchedEvents);
     const handshakes = login.parseHandshake(pages[2]);
-    // const totalPoints = login.parseTransactions();
+    const pointsThisYearArr = flatten(point).filter( elem => elem.year === YEAR);
+    const totalPointsThisYear = login.calculatePoints(pointsThisYearArr);
+    const totalPointsAllTime = login.calculatePoints(flatten(point));
     const username = login.username;
 
 
