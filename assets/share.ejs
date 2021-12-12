@@ -3,26 +3,26 @@
 <head>
 	<meta name=”robots” content=”noindex, nofollow">
 
-	<title>#jkt48wrapped2020 untuk <%= data.name %></title>
+	<title>#jkt48wrapped untuk <%= process.env.YEAR %></title>
 
 	<meta charset="UTF-8">	
-	<meta name="description" content="Dapatkan ringkasan #jkt48wrapped2020 kamu sekarang!">
+	<meta name="description" content="Dapatkan ringkasan #jkt48wrapped<%= process.env.YEAR %> kamu sekarang!">
 
 	<!-- Facebook Meta Tags -->
-	<meta property="og:url" content="https://2020.ngidol.club/share/<%= data.slug %>.html">
+	<meta property="og:url" content="https://<%= process.env.YEAR %>.ngidol.club/share/<%= data.slug %>.html">
 	<meta property="og:type" content="website">
-	<meta property="og:title" content="#jkt48wrapped2020 untuk <%= data.name %>">
-	<meta property="og:description" content="Dapatkan ringkasan #jkt48wrapped2020 kamu sekarang!">
-	<meta property="og:image" content="https://2020.ngidol.club/share/<%= data.slug %>.png">
+	<meta property="og:title" content="#jkt48wrapped<%= process.env.YEAR %> untuk <%= data.name %>">
+	<meta property="og:description" content="Dapatkan ringkasan #jkt48wrapped<%= process.env.YEAR %> kamu sekarang!">
+	<meta property="og:image" content="https://<%= process.env.YEAR %>.ngidol.club/share/<%= data.slug %>.png">
 
 	<!-- Twitter Meta Tags -->
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:site:" content="f4devcircle">
-	<meta property="twitter:domain" content="2020.ngidol.club">
-	<meta property="twitter:url" content="https://2020.ngidol.club/share/<%= data.slug %>.html">
-	<meta name="twitter:title" content="#jkt48wrapped2020 untuk <%= data.name %>">
-	<meta name="twitter:description" content="Dapatkan ringkasan #jkt48wrapped2020 kamu sekarang!">
-	<meta name="twitter:image" content="https://2020.ngidol.club/share/<%= data.slug %>.png">
+	<meta property="twitter:domain" content="<%= process.env.YEAR %>.ngidol.club">
+	<meta property="twitter:url" content="https://<%= process.env.YEAR %>.ngidol.club/share/<%= data.slug %>.html">
+	<meta name="twitter:title" content="#jkt48wrapped<%= process.env.YEAR %> untuk <%= data.name %>">
+	<meta name="twitter:description" content="Dapatkan ringkasan #jkt48wrapped<%= process.env.YEAR %> kamu sekarang!">
+	<meta name="twitter:image" content="https://<%= process.env.YEAR %>.ngidol.club/share/<%= data.slug %>.png">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -55,11 +55,11 @@
 		<div class="container-login100">
 			<div class="wrap-login100" id="result" style="display: block">
 				<span class="login100-form-title p-b-26" style="padding-bottom: 0px;">
-					#jkt48wrapped2020<br>
+					#jkt48wrapped<%= process.env.YEAR %><br>
 				</span>
 				<h4 style="margin-bottom: 25px; font-weight: bold; font-size: 13px; margin-top: 5px;" id="result-name"><%= data.name %></h4>
 
-				<h4>Handshake & video call terbanyak di 2020</h4>
+				<h4>Handshake & video call terbanyak di <%= process.env.YEAR %></h4>
 
 				<% if (data.hsImages[0]) { %>
 				<img class="foto" src="data:image/png;base64, <%= data.hsImages[0] %>">
@@ -84,7 +84,7 @@
 				<p class="result-p">Tidak tersedia</p>
 				<% } %>
 
-				<h4>Setlist paling sering ditonton di 2020</h4>
+				<h4>Setlist paling sering ditonton di <%= process.env.YEAR %></h4>
 
 				<% if (data.setlistImages[0]) { %>
 				<img class="foto" src="data:image/png;base64, <%= data.setlistImages[0] %>">
@@ -109,25 +109,25 @@
 				<p class="result-p">Tidak tersedia</p>
 				<% } %>
 
-				<h4>Total handshake & video call di 2020</h4>
+				<h4>Total handshake & video call di <%= process.env.YEAR %></h4>
 				<p class="result-p" id="result-total-hs"><%= data.hsCountText %></p>
 
-				<h4>Total kehadiran teater di 2020</h4>
+				<h4>Total kehadiran teater di <%= process.env.YEAR %></h4>
 				<p class="result-p" style="margin-bottom: 0px" id="result-total-setlist"><%= data.setlistCountText %></p>
 
 				<div class="share-section">
-					<a class="btn btn-info btn-sm btn-download" href="https://2020.ngidol.club">
+					<a class="btn btn-info btn-sm btn-download" href="https://<%= process.env.YEAR %>.ngidol.club">
                         <i class="fa fa-chevron-left" aria-hidden="true"></i> Buat Baru
                     </a>
-					<a class="btn btn-secondary btn-sm btn-download" href="https://2020.ngidol.club/share/<%= data.slug %>.png" download="#jkt48wrapped2020">
+					<a class="btn btn-secondary btn-sm btn-download" href="https://<%= process.env.YEAR %>.ngidol.club/share/<%= data.slug %>.png" download="#jkt48wrapped<%= process.env.YEAR %>">
 						<i class="fa fa-download" aria-hidden="true"></i> Unduh Hasil
 					</a>
-					<a class="twitter-share-button" data-size="large" href="https://twitter.com/intent/tweet?text=Ini%20adalah%20ringkasan%20%23jkt48wrapped2020%20ku%2C%20ayo%20cari%20tau%20punyamu%20juga%20%F0%9F%A5%B3&url=https://2020.ngidol.club/share/<%= data.slug %>.html&via=f4devcircle">
+					<a class="twitter-share-button" data-size="large" href="https://twitter.com/intent/tweet?text=Ini%20adalah%20ringkasan%20%23jkt48wrapped<%= process.env.YEAR %>%20ku%2C%20ayo%20cari%20tau%20punyamu%20juga%20%F0%9F%A5%B3&url=https://<%= process.env.YEAR %>.ngidol.club/share/<%= data.slug %>.html&via=f4devcircle">
 						Bagikan di Twitter
 					</a>
 				</div>
 
-				<p class="footer">© 2020 f4devc | <a href="https://github.com/f4devcircle">GitHub</a></p>
+				<p class="footer">© <%= process.env.YEAR %> f4devc | <a href="https://github.com/f4devcircle">GitHub</a></p>
 			</div>
 		</div>
 	</div>
