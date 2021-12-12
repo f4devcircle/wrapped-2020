@@ -135,7 +135,8 @@ app.post('/', async (req, res, next) => {
       hsImages: memberImagebuffers,
       hsTexts: handshakeRanks,
       setlistImages: setlistImageBuffers,
-      setlistTexts: setlistRanks
+      setlistTexts: setlistRanks,
+      totalPoints: displayPoints ? totalPointsThisYear.totalPoints : null,
     });
 
     let hsDetailText = handshakeRanks.join('\n');

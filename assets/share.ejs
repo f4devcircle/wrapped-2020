@@ -110,6 +110,11 @@
 				<p class="result-p">Tidak tersedia</p>
 				<% } %>
 
+				<% if (data.totalPoints) { %>
+				<h4>Total top up point di <%= process.env.YEAR %></h4>
+				<p class="result-p" id="result-total-hs"><%= (new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, })).format(data.totalPoints) %></p>
+				<% } %>
+
 				<h4>Total handshake & video call di <%= process.env.YEAR %></h4>
 				<p class="result-p" id="result-total-hs"><%= data.hsCountText %></p>
 
