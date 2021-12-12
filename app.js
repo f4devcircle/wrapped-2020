@@ -149,7 +149,7 @@ app.post('/', async (req, res, next) => {
       theaterCountText: totalAttendance.toString(),
       hsCountText: totalHS.toString(),
       userNameText: username,
-      totalPointsThisYear: displayPoints ? totalPointsThisYear : null,
+      totalPointsThisYear: displayPoints ? totalPointsThisYear.totalPoints : null,
     });
 
     fs.writeFileSync(`./share/${slug}.html`, html);
