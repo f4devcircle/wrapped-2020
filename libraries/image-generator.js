@@ -1,6 +1,12 @@
 const textToImage = require('text-to-image');
 const jimp = require('jimp');
 
+const formatter = new Intl.NumberFormat('id-ID', {
+  style: 'currency',
+  currency: 'IDR',
+  minimumFractionDigits: 0,
+});
+
 /**
  * Generate image for og:image, and write image into folder outputs
  * 
@@ -54,8 +60,16 @@ const generateImage = async (data) => {
     maxWidth: 700,
     customHeight: 40
   });
+  const totalPointsThisYear = data.totalPointsThisYear ? await textToImage.generate(formatter.format(data.totalPointsThisYear), {
+    margin: 0,
+    bgColor: '#ffffff00',
+    fontSize: 40,
+    fontFamily: 'Roboto',
+    fontWeight: 'bold',
+    customHeight: '60',
+  }) : null;
 
-  const baseImage = await jimp.read('./assets/base.png');
+  let baseImage = totalPointsThisYear ? await jimp.read(`./assets/base-topup-${process.env.YEAR}.png`) : await jimp.read(`./assets/base-${process.env.YEAR}.png`);
   const hsImage = await jimp.read(Buffer.from(data.hsImage, 'base64'))
   const setlistImage = await jimp.read(Buffer.from(data.setlistImage, 'base64'))
 
@@ -63,6 +77,21 @@ const generateImage = async (data) => {
     .circle();
   setlistImage.crop(0, 0, setlistImage.getWidth(), setlistImage.getWidth())
     .circle();
+
+  if (totalPointsThisYear) {
+    const image = await baseImage
+      .composite(hsImage.resize(270, 270), 70, 180)
+      .composite(setlistImage.resize(270, 270), 460, 180)
+      .composite(await jimp.read(Buffer.from((hsDetail.split(','))[1], 'base64')), 70, 465)
+      .composite(await jimp.read(Buffer.from((setlistDetail.split(','))[1], 'base64')), 460, 465)
+      .composite(await jimp.read(Buffer.from((hsCount.split(','))[1], 'base64')), 824, 135)
+      .composite(await jimp.read(Buffer.from((theaterCount.split(','))[1], 'base64')), 824, 275)
+      .composite(await jimp.read(Buffer.from((totalPointsThisYear.split(','))[1], 'base64')), 824, 415)
+      .composite(await jimp.read(Buffer.from((userName.split(','))[1], 'base64')), 145, 585)
+      .getBufferAsync(jimp.MIME_PNG);
+
+    return image;
+  }
 
   const image = await baseImage
     .composite(hsImage.resize(270, 270), 70, 180)

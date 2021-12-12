@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const compression = require('compression');
@@ -50,7 +51,8 @@ app.post('/', async (req, res, next) => {
   try {
     const {
       email,
-      password
+      password,
+      displayPoints,
     } = req.body;
 
     await login.login(email, password);
@@ -146,7 +148,8 @@ app.post('/', async (req, res, next) => {
       setlistImage: setlistImageBuffers[0],
       theaterCountText: totalAttendance.toString(),
       hsCountText: totalHS.toString(),
-      userNameText: username
+      userNameText: username,
+      totalPointsThisYear: displayPoints ? totalPointsThisYear : null,
     });
 
     fs.writeFileSync(`./share/${slug}.html`, html);
