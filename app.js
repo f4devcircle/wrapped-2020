@@ -1,4 +1,5 @@
 require('dotenv').config();
+const YEAR = process.env.YEAR;
 const express = require('express');
 const helmet = require('helmet');
 const compression = require('compression');
@@ -19,14 +20,12 @@ const generateImage = require('./libraries/image-generator');
 const uuid = require('uuid').v4;
 
 
-const membersJSON = JSON.parse(fs.readFileSync('./members.json', 'utf-8'));
-const setlistJSON = JSON.parse(fs.readFileSync('./setlists.json', 'utf-8'));
+const membersJSON = JSON.parse(fs.readFileSync(`./members_${YEAR}.json`, 'utf-8'));
+const setlistJSON = JSON.parse(fs.readFileSync(`./setlists_${YEAR}.json`, 'utf-8'));
 
 const ticketListUrl = 'mypage/ticket-list?';
 const eventListUrl = 'mypage/event-list?';
 const pointHistoryUrl = 'mypage/point-history?';
-
-const YEAR = process.env.YEAR;
 
 app.use(cors());
 app.use(helmet());
