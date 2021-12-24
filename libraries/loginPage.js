@@ -254,9 +254,6 @@ class Login {
       const {
         document
       } = (new JSDOM(page)).window;
-      // to get table id, because jeketi categorizes based on id, for VC, id is sepearated by day
-      const firstHandshakeId = Number(process.env.FIRST_HANDSHAKE_ID);
-      const lastHandshakeId = Number(process.env.LAST_HANDSHAKE_ID);
       const members = {};
       const membersArr = [];
 
@@ -264,7 +261,7 @@ class Login {
 
       elements.forEach(elem => {
 
-        if (elem.innerHTML.includes(YEAR)) {
+        if (elem.innerHTML.includes(YEAR) || (elem.innerHTML.includes("Rapsodi Handshake Event") && YEAR === "2020")) {
           const processYear = elem.innerHTML.split('handshake');
           const year = processYear[1].split("'");
           const id = year[0];
