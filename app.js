@@ -100,6 +100,7 @@ app.post('/', async (req, res, next) => {
 
     if (handshakes.length > 0) {
       const length = handshakes.length > 3 ? 3 : handshakes.length;
+      console.log(`${req.uuid}: ${JSON.stringify(handshakes)}`);
       for (let i = 0; i < length; i++) {
         const memberName = handshakes[i].name.split(' ').slice(0, 3).join(' ');
         memberImagebuffers.push(membersJSON[memberName]);
