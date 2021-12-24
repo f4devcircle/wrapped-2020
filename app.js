@@ -92,6 +92,7 @@ app.post('/', async (req, res, next) => {
     const totalPointsAllTime = login.calculatePoints(flatten(point));
     const username = login.username;
 
+    console.log(username);
     console.log(`YEAR : ${YEAR} : ${req.uuid}: ${totalPointsThisYear}`);
 
     const totalAttendance = `${attendance.reduce((cur, val) => cur + val.sum, 0)} kali`;
