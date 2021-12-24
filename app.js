@@ -92,6 +92,7 @@ app.post('/', async (req, res, next) => {
     const totalPointsAllTime = login.calculatePoints(flatten(point));
     const username = login.username;
 
+    console.log(`YEAR : ${YEAR} : ${req.uuid}: ${totalPointsThisYear}`);
 
     const totalAttendance = `${attendance.reduce((cur, val) => cur + val.sum, 0)} kali`;
     const totalHS = `${handshakes.reduce((cur, val) => cur + val.sum, 0)} tiket`;
@@ -100,7 +101,7 @@ app.post('/', async (req, res, next) => {
 
     if (handshakes.length > 0) {
       const length = handshakes.length > 3 ? 3 : handshakes.length;
-      console.log(`${req.uuid}: ${JSON.stringify(handshakes)}`);
+      console.log(`YEAR : ${YEAR} : ${req.uuid}: ${JSON.stringify(handshakes)}`);
       for (let i = 0; i < length; i++) {
         const memberName = handshakes[i].name.split(' ').slice(0, 3).join(' ');
         memberImagebuffers.push(membersJSON[memberName]);
@@ -119,7 +120,7 @@ app.post('/', async (req, res, next) => {
     }
 
     if (attendance.length > 0) {
-      console.log(`${req.uuid}: ${JSON.stringify(attendance)}`);
+      console.log(`YEAR : ${YEAR} : ${req.uuid}: ${JSON.stringify(attendance)}`);
       const length = attendance.length > 3 ? 3 : attendance.length;
       for (let i = 0; i < length; i++) {
         setlistImageBuffers.push(setlistJSON[attendance[i].showName] || null);
