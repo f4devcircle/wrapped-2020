@@ -118,6 +118,7 @@ app.post('/', async (req, res, next) => {
     }
 
     if (attendance.length > 0) {
+      console.log(`${req.uuid}: ${JSON.stringify(attendance)}`);
       const length = attendance.length > 3 ? 3 : attendance.length;
       for (let i = 0; i < length; i++) {
         setlistImageBuffers.push(setlistJSON[attendance[i].showName] || null);
