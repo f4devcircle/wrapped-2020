@@ -93,7 +93,7 @@ app.post('/', async (req, res, next) => {
     const username = login.username;
 
     console.log(username);
-    console.log(`YEAR : ${YEAR} : ${req.uuid}: ${totalPointsThisYear}`);
+    console.log(`YEAR : ${YEAR} : ${req.uuid}: ${JSON.stringify(totalPointsThisYear)}`);
 
     const totalAttendance = `${attendance.reduce((cur, val) => cur + val.sum, 0)} kali`;
     const totalHS = `${handshakes.reduce((cur, val) => cur + val.sum, 0)} tiket`;
