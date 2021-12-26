@@ -167,6 +167,8 @@ app.post('/', async (req, res, next) => {
       res.status(500).send();
       console.error(results);
     }
+    fs.unlinkSync(`./share/${slug}.html`, html);
+    fs.unlinkSync(`./share/${slug}.png`, image);
   } catch (error) {
     console.log(`${req.uuid}: ${login.username}`);
     console.error(error);
