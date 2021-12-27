@@ -56,6 +56,10 @@ class Login {
         throw new Error("Alamat email atau Kata kunci salah");
       }
 
+      if (resp.body.includes('kadaluwarsa')) {
+        throw new Error("Gagal karena OFC expired, mohon untuk memperbarui OFC terlebih dahulu")
+      }
+
       // fs.writeFileSync('./response.html', resp.body);
 
       const {
