@@ -55,7 +55,7 @@ class Login {
       if (resp.body.includes('kadaluwarsa')) {
         throw new Error("Gagal karena OFC expired, mohon untuk memperbarui OFC terlebih dahulu")
       }
-      if (resp.body.includes('salah')) {
+      if (resp.body.includes('Alamat email atau Kata sandi salah')) {
         throw new Error("Alamat email atau Kata kunci salah");
       }
 
