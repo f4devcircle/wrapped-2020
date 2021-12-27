@@ -56,7 +56,7 @@ class Login {
         throw new Error("Alamat email atau Kata kunci salah");
       }
 
-      fs.writeFileSync('./response.html', resp.body);
+      // fs.writeFileSync('./response.html', resp.body);
 
       const {
         document
@@ -108,7 +108,7 @@ class Login {
         document
       } = (new JSDOM(page)).window;
 
-      fs.writeFileSync('./shows.html', page);
+      // fs.writeFileSync('./shows.html', page);
 
       const rows = Array.from(document.querySelectorAll('tr'));
       rows.shift();
@@ -228,7 +228,9 @@ class Login {
   combineShows(shows, events) {
     let combinedShows = [];
     shows.forEach(show => {
-      combinedShows = combinedShows.concat(Object.keys(show));
+      if (show) {
+        combinedShows = combinedShows.concat(Object.keys(show));
+      }
     })
     const showSummary = {};
     const summary = [];
