@@ -52,12 +52,11 @@ class Login {
         },
       });
 
-      if (resp.body.includes('salah')) {
-        throw new Error("Alamat email atau Kata kunci salah");
-      }
-
       if (resp.body.includes('kadaluwarsa')) {
         throw new Error("Gagal karena OFC expired, mohon untuk memperbarui OFC terlebih dahulu")
+      }
+      if (resp.body.includes('salah')) {
+        throw new Error("Alamat email atau Kata kunci salah");
       }
 
       // fs.writeFileSync('./response.html', resp.body);
