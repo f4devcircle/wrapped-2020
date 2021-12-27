@@ -176,6 +176,10 @@ app.post('/', async (req, res, next) => {
       error.status = 400;
       next(error);
     }
+    if (error.message === "Gagal karena OFC expired, mohon untuk memperbarui OFC terlebih dahulu") {
+      error.status = 400;
+      next(error);
+    }
   }
 });
 
