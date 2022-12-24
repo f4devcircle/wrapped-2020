@@ -2,3 +2,4 @@ node_modules
 .env
 runner.js
 keyfile.json
+.ds_store
