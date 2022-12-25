@@ -1,135 +1,217 @@
 const fs = require('fs')
+const { loadImage, createCanvas } = require('canvas')
 
 async function main () {
 
-  const headerText = 'Naskapal Wrapped 2022'
-  const topVC = 'Video Call Teratas 2022'
-  const topSetlist = 'Setlist Teratas 2022'
-  const fontColor = '#000000'
-  const fontStyle = 'bold 15pt Gotham'
-  const hashtag = '#jkt48wrapped2022'
+  const headerText = 'Naskapal Wrapped';
+  const headerTextOptions = 'bold 25pt Gotham';
+  const topVC = 'Video Call Teratas';
+  const topSetlist = 'Setlist Teratas';
+  const fontColor = '#000000';
+  const headerFont = 'bold 30pt Gotham';
+  const fontStyle = 'bold 19pt Gotham';
+  const hashtag = '#jkt48wrapped2022';
+  const winRate = 'Winrate Verif Teater';
+  const totalVideoCall = 'Jumlah Video Call';
+  const totalAttendance = 'Jumlah Kehadiran';
+  const totalTopup = 'Total pengisian point';
+
+  const singletText = 'bold 26pt Gotham';
+
+  const numberFormatter = new Intl.NumberFormat('en-US');
+
+  const topVc = [{ name: 'Jesslyn Callista', amount: 60}, {name: 'Jesslyn Elly', amount: 20}, {name: 'Jessica Chandra',  amount: 10}];
+  const setlistAttendance = [{name: 'Tunas di Balik Seragam', amount: 12}, {name: 'Gadis Gadis Remaja', amount: 6}, {name: 'Aturan Anti Cinta', amount: 2}];
+  const topupAmount = 100000000;
+  const vcAmount = 100;
+  const attendanceAmount = 22;
+  const winAmount = 0;
+  const lostAmount = 100;
+  const percentage = 25 //Math.round(winAmount / (winAmount + lostAmount) * 100);
   
-  const { loadImage, createCanvas } = require('canvas')
   const width = 1080
   const height = 1600
+
   const canvas = createCanvas(width, height)
   const context = canvas.getContext('2d')
   const backgroundColor = '#e0e0e0'
-  const fontBaseline = 'top'
-  const fontAlignment = 'center'
+  const fontBaseline = 'bottom'
+  const fontAlignment = 'left'
+  const rightTextPosition = width * 0.60
+  const leftTextPosition = width * 0.10
+  const topQuarter = height * 0.30
+  const midHeight = height * 0.50
+  const bottomQuarter = height * 0.65
+  const midWidth = width * 0.50
+  const leftQuarter = width * 0.25
+  const rightQuarter = width * 0.75
+  const winRateBreakdown = `(${winAmount} menang, ${lostAmount} kalah)`
+
+  const winRateLength = context.measureText(winRate).width;
   
-  
-  context.fillStyle = backgroundColor
+  context.fillStyle = '#ffffff'
   context.fillRect(0, 0, width, height)
+
+  context.shadowBlur = 90
+  context.shadowColor = 'rgba(0, 0, 0, 0.5)'
+  context.fillStyle = backgroundColor
+  context.fillRect(30, 30, width - 60, height - 60)
+
+  context.shadowColor = 'transparent'
+
+
+  context.lineWidth = 2
+  context.moveTo(width * 0.25, 0, 0);
+  context.lineTo(width * 0.25, height)
+
+  context.lineWidth = 2
+  context.moveTo(width * 0.50, 0, 0);
+  context.lineTo(width * 0.50, height)
+
+  context.lineWidth = 2
+  context.moveTo(width * 0.60, 0, 0);
+  context.lineTo(width * 0.60, height)
+
+  context.lineWidth = 2
+  context.moveTo(width * 0.70, 0, 0);
+  context.lineTo(width * 0.70, height)
+
+  context.lineWidth = 2
+  context.moveTo(width * 0.80, 0, 0);
+  context.lineTo(width * 0.80, height)
+
+  context.lineWidth = 2
+  context.moveTo(width * 0.75, 0, 0);
+  context.lineTo(width * 0.75, height)
+
+  context.lineWidth = 2
+  context.moveTo(0, height * 0.25, 0);
+  context.lineTo(width, height * 0.25);
+
+  context.lineWidth = 2
+  context.moveTo(0, height * 0.50, 0);
+  context.lineTo(width, height * 0.50);
+
+  context.lineWidth = 10
+  context.strokeStyle = 'green'
+  context.moveTo(0, height * 0.75, 0);
+  context.lineTo(width, height * 0.75);
+  // context.stroke()
   
   // headers 
   
-  context.font = fontStyle
+  context.font = headerTextOptions
   context.textBaseline = fontBaseline
-  context.textAlign = fontAlignment
+  context.textAlign = 'center'
   context.fillStyle = fontColor
   context.fillText(headerText, width / 2, 80)
   
   // top vc
-  context.font = fontStyle
+  context.font = headerFont
   context.textBaseline = fontBaseline
   context.textAlign = fontAlignment
   context.fillStyle = fontColor
-  context.fillText(topVC, width * 0.22, height * 0.25)
+  context.fillText(topVC, leftTextPosition, topQuarter)
 
   
   // top setlist  
-  context.font = fontStyle
+  context.font = headerFont
   context.textBaseline = fontBaseline
   context.textAlign = fontAlignment
   context.fillStyle = fontColor
-  context.fillText(topSetlist, width * 0.75, height * 0.25)
+  context.fillText(topSetlist, rightTextPosition + 25, topQuarter)
   
   
-  // Top VC #1
-  context.font = fontStyle
-  context.textBaseline = fontBaseline
-  context.textAlign = 'left'
-  context.fillStyle = fontColor
-  context.fillText('#1 Jesslyn Callista - 60 Tiket', width * 0.16, (height * 0.25) + 50)
-  // Top VC #2
-  context.font = fontStyle
-  context.textBaseline = fontBaseline
-  context.textAlign = 'left'
-  context.fillStyle = fontColor
-  context.fillText('#2 Jesslyn Elly - 20 Tiket', width * 0.16, (height * 0.25) + 100)
-  // Top VC #3
-  context.font = fontStyle
-  context.textBaseline = fontBaseline
-  context.textAlign = 'left'
-  context.fillStyle = fontColor
-  context.fillText('#3 Maria Natalia Genoveva Desy Purnamasari Gunawan - 10 Tiket', width * 0.16, (height * 0.25) + 150, (width * 0.16) + 150)
+  for (let i = 0; i < topVc.length; i++) {
+    context.font = fontStyle
+    context.textBaseline = fontBaseline
+    context.textAlign = fontAlignment
+    context.fillStyle = fontColor
+    context.fillText(`#${i + 1} ${topVc[i].name} - ${topVc[i].amount} Tiket`, leftTextPosition, topQuarter + 50 + (i * 50))
+  }
 
-  // Top Setlist #1
-  context.font = fontStyle
-  context.textBaseline = fontBaseline
-  context.textAlign = 'left'
-  context.fillStyle = fontColor
-  context.fillText('#1 Tunas di Balik Seragam - 12 kali', width * 0.66, (height * 0.25) + 50, 300)
-  // Top Setlist #2
-  context.font = fontStyle
-  context.textBaseline = fontBaseline
-  context.textAlign = 'left'
-  context.fillStyle = fontColor
-  context.fillText('#2 Gadis Gadis Remaja - 6 kali', width * 0.66, (height * 0.25) + 100, 300)
-  // Top Setlist #3
-  context.font = fontStyle
-  context.textBaseline = fontBaseline
-  context.textAlign = 'left'
-  context.fillStyle = fontColor
-  context.fillText('#2 Aturan Anti Cinta - 2 kali', width * 0.66, (height * 0.25) + 150, 300)
+  for (let i = 0; i < setlistAttendance.length; i++) {
+    context.font = fontStyle
+    context.textBaseline = fontBaseline
+    context.textAlign = fontAlignment
+    context.fillStyle = fontColor
+    context.fillText(`#${i + 1} ${setlistAttendance[i].name} - ${setlistAttendance[i].amount} kali`, rightTextPosition + 25, topQuarter + 50 + (i * 50), 300)
+  }
   
   // Jumlah Video Call
-  context.font = fontStyle
+  context.font = headerFont
   context.textBaseline = fontBaseline
   context.textAlign = fontAlignment
   context.fillStyle = fontColor
-  context.fillText('Keseluruhan Video Call 2022', width * 0.25, height * 0.50)
+  context.fillText(totalVideoCall, leftTextPosition, midHeight)
   // video call number
+  context.font = singletText
+  context.textBaseline = fontBaseline
+  context.textAlign = 'right'
+  context.fillStyle = fontColor
+  const totalVCLength = context.measureText(totalVideoCall).width;
+  const totalVCValue = context.measureText(`${vcAmount} tiket`).width;
+  context.fillText(`${vcAmount} tiket`, leftTextPosition + (totalVCLength - totalVCValue / 2), midHeight + 70)
+
 
   // Jumlah Kehadiran teater
-  context.font = fontStyle
+  context.font = headerFont
   context.textBaseline = fontBaseline
   context.textAlign = fontAlignment
   context.fillStyle = fontColor
-  context.fillText('Jumlah Kehadiran Teater 2022', width * 0.75, height * 0.50)
+  context.fillText(totalAttendance, rightTextPosition, midHeight)
   // attendance number
+  context.font = singletText
+  context.textBaseline = fontBaseline
+  context.textAlign = 'center'
+  context.fillStyle = fontColor
+  const totalAttendanceLength = context.measureText(totalAttendance).width;
+  const totalAttendanceValue = context.measureText(`${attendanceAmount} kali`).width;
+  context.fillText(`${attendanceAmount} kali`, rightTextPosition + (totalAttendanceLength / 2) + 10, midHeight + 70)
 
   // Total topup
-  context.font = fontStyle
+  context.font = headerFont
   context.textBaseline = fontBaseline
   context.textAlign = fontAlignment
   context.fillStyle = fontColor
-  context.fillText('Total pengisian point di 2022', width * 0.25, height * 0.75)
+  context.fillText(totalTopup, leftTextPosition, bottomQuarter)
   // topup amount
-  context.font = fontStyle
+  context.font = singletText
   context.textBaseline = fontBaseline
-  context.textAlign = fontAlignment
+  context.textAlign = 'center'
   context.fillStyle = fontColor
-  context.fillText('9,000,000', width * 0.25, (height * 0.75) + 35 )
+  const topupAmountLength = context.measureText(totalTopup).width;
+  if (topupAmount === 0) {
+    context.fillText('Nihil', leftTextPosition + 195, bottomQuarter + 70)
+  }
+  if (topupAmount > 0) {
+    context.fillText(`${numberFormatter.format(topupAmount)} P`, leftTextPosition + 195, bottomQuarter + 70)
+  }
+
   // Winrate
-  context.font = fontStyle
+  context.font = headerFont
   context.textBaseline = fontBaseline
   context.textAlign = fontAlignment
   context.fillStyle = fontColor
-  context.fillText('Persentase Kemenangan Undian Teater 2022', width * 0.75, height * 0.75)
+  context.fillText(winRate, rightTextPosition, bottomQuarter)
+
   // percentage text
-  context.font = fontStyle
+  context.font = singletText
   context.textBaseline = fontBaseline
   context.textAlign = fontAlignment
   context.fillStyle = fontColor
-  context.fillText('60%', width * 0.75, (height * 0.75) + 35)
+  if (percentage === 0) {
+    context.fillText(`${percentage}%`, rightTextPosition + 180, bottomQuarter + 70)
+  } else {
+    context.fillText(`${percentage}%`, rightTextPosition + 160, bottomQuarter + 70)
+  }
   // percentage breakdown
-  context.font = fontStyle
+  const winrateBreakdownFont = '20pt Gotham';
+  context.font = winrateBreakdownFont
   context.textBaseline = fontBaseline
-  context.textAlign = fontAlignment
+  context.textAlign = 'center'
   context.fillStyle = fontColor
-  context.fillText('(6 kali menang, 4 kali kalah)', width * 0.75, (height * 0.75) + 70)
+  context.fillText(winRateBreakdown, width * 0.77, bottomQuarter + 100);
 
   // Footer
   context.fillRect(0, height - (height * 0.04), width, (height - (height * 0.05)))
@@ -140,18 +222,17 @@ async function main () {
   context.textBaseline = fontBaseline
   context.textAlign = 'right'
   context.fillStyle = '#ffffff'
-  context.fillText(hashtag, width - 20, height - (height * 0.03) + 20)
+  context.fillText(hashtag, width - 20, height - (height * 0.03) + 30)
   
   
   // Footer Image
   const footerLogo = await loadImage('./assets/F4DCLogoTrans2.png')
-  context.drawImage(footerLogo, 20, height - (height * 0.045), 128, 128)
+  context.drawImage(footerLogo, 20, height - (height * 0.040), 64, 64)
 
   
   // oshi image
   const oshiImage = await loadImage('./assets/jesslyn_callista.jpeg')
-  console.log(context.measureText(headerText).width)
-  context.drawImage(oshiImage, ((width / 2) - 60), 120, 128, 180)
+  context.drawImage(oshiImage, ((width / 2) - 192 / 2), 100, 192, 270)
   const imgBuffer = canvas.toBuffer('image/png')
   fs.writeFileSync('./test.png', imgBuffer)
 }
