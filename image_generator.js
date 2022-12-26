@@ -8,21 +8,21 @@ async function main () {
   const topVC = 'Video Call Teratas';
   const topSetlist = 'Setlist Teratas';
   const fontColor = '#000000';
-  const headerFont = 'bold 30pt Gotham';
-  const fontStyle = 'bold 19pt Gotham';
+  const headerFont = 'bold 30pt Sans-Serif';
+  const fontStyle = '19pt Courier';
   const hashtag = '#jkt48wrapped2022';
   const winRate = 'Winrate Verif Teater';
   const totalVideoCall = 'Jumlah Video Call';
   const totalAttendance = 'Jumlah Kehadiran';
   const totalTopup = 'Total pengisian point';
 
-  const singletText = 'bold 26pt Gotham';
+  const singletText = '26pt Courier';
 
   const numberFormatter = new Intl.NumberFormat('en-US');
 
-  const topVc = [{ name: 'Jesslyn Callista', amount: 60}, {name: 'Jesslyn Elly', amount: 20}, {name: 'Jessica Chandra',  amount: 10}];
+  const topVc = [{ name: 'Jesslyn Callista', amount: 60}, {name: 'Cynthia Yaputera', amount: 20}, {name: 'Jessica Chandra',  amount: 10}];
   const setlistAttendance = [{name: 'Tunas di Balik Seragam', amount: 12}, {name: 'Gadis Gadis Remaja', amount: 6}, {name: 'Aturan Anti Cinta', amount: 2}];
-  const topupAmount = 100000000;
+  const topupAmount = 100000;
   const vcAmount = 100;
   const attendanceAmount = 22;
   const winAmount = 0;
@@ -39,8 +39,8 @@ async function main () {
   const fontAlignment = 'left'
   const rightTextPosition = width * 0.60
   const leftTextPosition = width * 0.10
-  const topQuarter = height * 0.30
-  const midHeight = height * 0.50
+  const topQuarter = height * 0.40
+  const midHeight = height * 0.55
   const bottomQuarter = height * 0.65
   const midWidth = width * 0.50
   const leftQuarter = width * 0.25
@@ -127,7 +127,7 @@ async function main () {
     context.textBaseline = fontBaseline
     context.textAlign = fontAlignment
     context.fillStyle = fontColor
-    context.fillText(`#${i + 1} ${topVc[i].name} - ${topVc[i].amount} Tiket`, leftTextPosition, topQuarter + 50 + (i * 50))
+    context.fillText(`#${i + 1} ${topVc[i].name} - ${topVc[i].amount} Tiket`, leftTextPosition, topQuarter + 50 + (i * 50), 400)
   }
 
   for (let i = 0; i < setlistAttendance.length; i++) {
@@ -172,46 +172,41 @@ async function main () {
   // Total topup
   context.font = headerFont
   context.textBaseline = fontBaseline
-  context.textAlign = fontAlignment
+  context.textAlign = 'center'
   context.fillStyle = fontColor
-  context.fillText(totalTopup, leftTextPosition, bottomQuarter)
+  context.fillText(totalTopup, midWidth, height * 0.30)
   // topup amount
   context.font = singletText
   context.textBaseline = fontBaseline
   context.textAlign = 'center'
   context.fillStyle = fontColor
-  const topupAmountLength = context.measureText(totalTopup).width;
   if (topupAmount === 0) {
-    context.fillText('Nihil', leftTextPosition + 195, bottomQuarter + 70)
+    context.fillText('Nihil', midWidth, height * 0.25 + 70)
   }
   if (topupAmount > 0) {
-    context.fillText(`${numberFormatter.format(topupAmount)} P`, leftTextPosition + 195, bottomQuarter + 70)
+    context.fillText(`${numberFormatter.format(topupAmount)} P`, midWidth, height * 0.30 + 70)
   }
 
   // Winrate
   context.font = headerFont
   context.textBaseline = fontBaseline
-  context.textAlign = fontAlignment
+  context.textAlign = 'center'
   context.fillStyle = fontColor
-  context.fillText(winRate, rightTextPosition, bottomQuarter)
+  context.fillText(winRate, midWidth, height * 0.70)
 
   // percentage text
   context.font = singletText
   context.textBaseline = fontBaseline
-  context.textAlign = fontAlignment
+  context.textAlign = 'center'
   context.fillStyle = fontColor
-  if (percentage === 0) {
-    context.fillText(`${percentage}%`, rightTextPosition + 180, bottomQuarter + 70)
-  } else {
-    context.fillText(`${percentage}%`, rightTextPosition + 160, bottomQuarter + 70)
-  }
+  context.fillText(`${percentage}%`, midWidth, height * 0.70 + 50)
   // percentage breakdown
   const winrateBreakdownFont = '20pt Gotham';
   context.font = winrateBreakdownFont
   context.textBaseline = fontBaseline
   context.textAlign = 'center'
   context.fillStyle = fontColor
-  context.fillText(winRateBreakdown, width * 0.77, bottomQuarter + 100);
+  context.fillText(winRateBreakdown, midWidth, height * 0.70 + 100);
 
   // Footer
   context.fillRect(0, height - (height * 0.04), width, (height - (height * 0.05)))
@@ -232,7 +227,7 @@ async function main () {
   
   // oshi image
   const oshiImage = await loadImage('./assets/jesslyn_callista.jpeg')
-  context.drawImage(oshiImage, ((width / 2) - 192 / 2), 100, 192, 270)
+  context.drawImage(oshiImage, ((width / 2) - 192 / 2), 120, 192, 270)
   const imgBuffer = canvas.toBuffer('image/png')
   fs.writeFileSync('./test.png', imgBuffer)
 }
