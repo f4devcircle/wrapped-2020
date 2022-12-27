@@ -38,15 +38,15 @@
 	<link rel="stylesheet" type="text/css" href="../css/util.css">
 	<link rel="stylesheet" type="text/css" href="../css/main.css">
 
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-1EM4793VWK"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
+	<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6BTVQGVJ1N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-		gtag('config', 'G-1EM4793VWK');
-		</script>
+  gtag('config', 'G-6BTVQGVJ1N');
+</script>
 
 	<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></a>
 </head>
@@ -60,66 +60,9 @@
 				</span>
 				<h4 style="margin-bottom: 25px; font-weight: bold; font-size: 13px; margin-top: 5px;" id="result-name"><%= data.name %></h4>
 
-				<h4>Handshake & video call terbanyak di <%= process.env.YEAR %></h4>
-
-				<% if (data.hsImages[0]) { %>
-				<img class="foto" src="data:image/png;base64, <%= data.hsImages[0] %>">
-				<% } %>
-				<% if (data.hsImages[1]) { %>
-				<img class="foto" src="data:image/png;base64, <%= data.hsImages[1] %>">
-				<% } %>
-				<% if (data.hsImages[2]) { %>
-				<img class="foto" src="data:image/png;base64, <%= data.hsImages[2] %>">
-				<% } %>
-				
-				<% if (data.hsTexts[0]) { %>
-				<p class="result-p"><%= data.hsTexts[0] %></p>
-				<% } %>
-				<% if (data.hsTexts[1]) { %>
-				<p class="result-p"><%= data.hsTexts[1] %></p>
-				<% } %>
-				<% if (data.hsTexts[2]) { %>
-				<p class="result-p"><%= data.hsTexts[2] %></p>
-				<% } %>
-				<% if (!data.hsTexts.length) { %>
-				<p class="result-p">Tidak tersedia</p>
-				<% } %>
-
-				<h4>Setlist paling sering ditonton di <%= process.env.YEAR %></h4>
-
-				<% if (data.setlistImages[0]) { %>
-				<img class="foto" src="data:image/png;base64, <%= data.setlistImages[0] %>">
-				<% } %>
-				<% if (data.setlistImages[1]) { %>
-				<img class="foto" src="data:image/png;base64, <%= data.setlistImages[1] %>">
-				<% } %>
-				<% if (data.setlistImages[2]) { %>
-				<img class="foto" src="data:image/png;base64, <%= data.setlistImages[2] %>">
-				<% } %>
-
-				<% if (data.setlistTexts[0]) { %>
-				<p class="result-p"><%= data.setlistTexts[0] %></p>
-				<% } %>
-				<% if (data.setlistTexts[1]) { %>
-				<p class="result-p"><%= data.setlistTexts[1] %></p>
-				<% } %>
-				<% if (data.setlistTexts[2]) { %>
-				<p class="result-p"><%= data.setlistTexts[2] %></p>
-				<% } %>
-				<% if (!data.setlistTexts.length) { %>
-				<p class="result-p">Tidak tersedia</p>
-				<% } %>
-
-				<% if (data.totalPoints) { %>
-				<h4>Total top up point di <%= process.env.YEAR %></h4>
-				<p class="result-p" id="result-total-hs"><%= (new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, })).format(data.totalPoints) %></p>
-				<% } %>
-
-				<h4>Total handshake & video call di <%= process.env.YEAR %></h4>
-				<p class="result-p" id="result-total-hs"><%= data.hsCountText %></p>
-
-				<h4>Total kehadiran teater di <%= process.env.YEAR %></h4>
-				<p class="result-p" style="margin-bottom: 0px" id="result-total-setlist"><%= data.setlistCountText %></p>
+				<div class="stats-image">
+					<img src="https://2022.ngidol.club/share/<%= data.slug %>.png" alt="Statistik Ngidol">
+				</div>>
 
 				<div class="share-section">
 					<a class="btn btn-info btn-sm btn-download" href="https://<%= process.env.YEAR %>.ngidol.club">

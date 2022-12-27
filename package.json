@@ -23,6 +23,7 @@
     "jsdom": "^16.4.0",
     "limit-characters": "^1.0.2",
     "lodash.flatten": "^4.4.0",
+    "luxon": "^3.1.1",
     "text-to-image": "^2.4.4",
     "tough-cookie": "^4.0.0",
     "uuid": "^8.3.1"

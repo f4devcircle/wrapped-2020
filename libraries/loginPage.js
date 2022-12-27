@@ -6,12 +6,17 @@ const {
 const {
   JSDOM
 } = require('jsdom');
-
-const fs = require('fs');
+const flatten = require('lodash.flatten');
+const { DateTime } = require('luxon');
+const { main } = require('../image_generator');
 
 const handshakeUrl = 'mypage/handshake-session?lang=id'
+const ticketListUrl = 'mypage/ticket-list?';
+const eventListUrl = 'mypage/event-list?';
+const pointHistoryUrl = 'mypage/point-history?';
+const mypageUrl = 'mypage?';
 
-const setlist = ['Cara Meminum Ramune', 'Fly! Team T', 'Aturan Anti Cinta', 'Gadis Gadis Remaja', 'Tunas di Balik Seragam', 'Fajar Sang Idola', 'Pajama Drive'];
+const setlist = ['Pajama Drive', 'Banzai', 'Aturan Anti Cinta', 'Gadis Gadis Remaja', 'Tunas di Balik Seragam'];
 const YEAR = process.env.YEAR;
 const isSetlistName = text => setlist.some(setlistTitle => text ? text.includes(setlistTitle) : '');
 const getSetlistName = text => setlist.find(setlistTitle => text.includes(setlistTitle));
@@ -76,6 +81,21 @@ class Login {
     }
   }
 
+  parseOshi (page) {
+    try {
+      const {
+        document
+      } = (new JSDOM(page)).window;
+      
+      const oshiElement = document.querySelector('.entry-mypage__profile');
+      const oshiUrl = oshiElement.querySelector('img').src;
+      const oshiName = oshiUrl.split('/')[2];
+      return oshiName;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async getPage(link) {
     try {
       return await this.req.get(link, {
@@ -104,6 +124,58 @@ class Login {
     }
   }
 
+  parseWinnings(page) {
+    try {
+      const {
+        document
+      } = (new JSDOM(page)).window;
+
+      const rows = Array.from(document.querySelectorAll('tr'));
+      rows.shift();
+      const lotteryStart = DateTime.fromISO('2022-05-29T00:00:00.000+07:00');
+      let winCount = 0;
+      let lostCount = 0;
+      
+      rows.forEach(row => {
+        const datas = Array.from(row.querySelectorAll('td'));
+        const date = datas[1].innerHTML;
+        const year = date.split(' ')[2];
+        
+        const dates = date.split(' ');
+
+        const months = {
+          Januari: 1,
+          Februari: 2,
+          Maret: 3,
+          April: 4,
+          Mei: 5,
+          Juni: 6,
+          Juli: 7,
+          Agustus: 8,
+          September: 9,
+          Oktober: 10,
+          November: 11,
+          Desember: 12
+        }
+
+        const showDate = DateTime.fromFormat(`${+year}, ${months[dates[1]]}, ${+dates[0]}`, 'yyyy, M, d');
+
+        if (showDate.toSeconds() > lotteryStart.toSeconds() && datas[0].innerHTML.includes('Detil')) {
+          winCount += 1;
+        } else if (showDate.toSeconds() > lotteryStart.toSeconds() && datas[0].innerHTML.includes('Kalah')) {
+          lostCount += 1;
+        } 
+      })
+
+      return {
+        winCount,
+        lostCount,
+      };
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   parseShowTickets(page) {
     try {
       const watchedShows = {};
@@ -115,17 +187,49 @@ class Login {
 
       const rows = Array.from(document.querySelectorAll('tr'));
       rows.shift();
+      const lotteryStart = DateTime.fromISO('2022-05-29T00:00:00.000+07:00');
 
       rows.forEach(row => {
         const datas = Array.from(row.querySelectorAll('td'));
         const date = datas[1].innerHTML;
+        const showName = datas[2].innerHTML
         const year = date.split(' ')[2];
-        const showName = datas[2].innerHTML;
-        if (year == YEAR) {
-          if (watchedShows[showName]) {
-            watchedShows[showName] += 1;
-          } else if (isSetlistName(showName)) {
-            watchedShows[showName] = 1;
+
+        const dates = date.split(' ');
+
+        const months = {
+          Januari: 1,
+          Februari: 2,
+          Maret: 3,
+          April: 4,
+          Mei: 5,
+          Juni: 6,
+          Juli: 7,
+          Agustus: 8,
+          September: 9,
+          Oktober: 10,
+          November: 11,
+          Desember: 12
+        }
+
+        const showDate = DateTime.fromFormat(`${+year}, ${months[dates[1]]}, ${+dates[0]}`, 'yyyy, M, d');
+
+        if (showDate.toSeconds() > lotteryStart.toSeconds() && datas[0].innerHTML.includes('Detil')) {
+          if (year == YEAR) {
+            if (watchedShows[showName]) {
+              watchedShows[showName] += 1;
+            } else if (isSetlistName(showName)) {
+              watchedShows[showName] = 1;
+            }
+          }
+        } else if (showDate.toSeconds() > lotteryStart.toSeconds() && datas[0].innerHTML.includes('Kalah')) {
+        } else {
+          if (year == YEAR) {
+            if (watchedShows[showName]) {
+              watchedShows[showName] += 1;
+            } else if (isSetlistName(showName)) {
+              watchedShows[showName] = 1;
+            }
           }
         }
       })
