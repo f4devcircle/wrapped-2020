@@ -18,7 +18,7 @@ const {
 } = require('./libraries/bucketManager');
 const generateImage = require('./libraries/image-generator');
 const uuid = require('uuid').v4;
-const { main } = require('../image_generator');
+const { main } = require('./image_generator');
 
 
 
