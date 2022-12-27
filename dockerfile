@@ -9,5 +9,4 @@ COPY package.json ./
 RUN npm install --build-from-source --production
 
 COPY . /app/
-EXPOSE 8080
 CMD ["node", "/app/bin/www"]
