@@ -18,6 +18,8 @@ const {
 } = require('./libraries/bucketManager');
 const generateImage = require('./libraries/image-generator');
 const uuid = require('uuid').v4;
+const { main } = require('../image_generator');
+
 
 
 const membersJSON = JSON.parse(fs.readFileSync(`./members_${YEAR}.json`, 'utf-8'));
@@ -55,10 +57,11 @@ app.post('/', async (req, res, next) => {
     } = req.body;
 
     await login.login(email, password);
-    const pages = await Promise.all([login.getPage(ticketListUrl), login.getPage(eventListUrl), login.getHandshakeList(), login.getPage(pointHistoryUrl)]);
+    const pages = await Promise.all([login.getPage(ticketListUrl), login.getPage(eventListUrl), login.getHandshakeList(), login.getPage(pointHistoryUrl), login.getPage(mypageUrl)]);
     const showTickets = [pages[0]];
     const events = [pages[1]];
     const points = [pages[3]];
+    const oshi = pages[4];
     let ticketListNextPage;
     let eventNextPage;
     let pointsNextPage;
@@ -77,6 +80,10 @@ app.post('/', async (req, res, next) => {
       return login.parseShowTickets(show);
     })
 
+    const winnings = showTickets.map(show => {
+      return login.parseWinnings(show);
+    })
+
     const watchedEvents = events.map(event => {
       return login.parseEvents(event);
     })
@@ -85,12 +92,37 @@ app.post('/', async (req, res, next) => {
       return login.parsePoints(point);
     })
 
+    const oshiPhotoUrl = login.parseOshi(oshi);
     const attendance = login.combineShows(watchedShows, watchedEvents);
     const handshakes = login.parseHandshake(pages[2]);
     const pointsThisYearArr = flatten(point).filter( elem => elem.year === YEAR);
     const totalPointsThisYear = login.calculatePoints(pointsThisYearArr);
     const totalPointsAllTime = login.calculatePoints(flatten(point));
+    const attendanceCount = attendance.reduce((prev, cur) => {
+      return prev + cur.sum;
+    }, 0);
+    const totalVc = handshakes.reduce((prev, cur) => {
+      return prev + cur.sum;
+    }, 0);
+    const winSummary = winnings.reduce((prev, cur) => {
+      return { winCount: prev.winCount + cur.winCount, lostCount: prev.lostCount + cur.lostCount }
+    }, {winCount: 0, lostCount: 0});
     const username = login.username;
+
+    const data = {
+      username,
+      setlistRanks: attendance,
+      vcRanks: handshakes,
+      vcAmount: totalVc,
+      attendanceAmount: attendanceCount,
+      winAmount: winSummary.winCount,
+      lostAmount: winSummary.lostCount,
+      totalTopup: totalPointsThisYear.totalPoints,
+      generatePoints: displayPoints,
+      oshi: oshiPhotoUrl,
+    }
+
+    main(data);
 
     console.log(username);
     console.log(`YEAR : ${YEAR} : ${req.uuid}: ${JSON.stringify(totalPointsThisYear)}`);
