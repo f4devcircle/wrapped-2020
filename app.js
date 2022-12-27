@@ -28,6 +28,8 @@ const setlistJSON = JSON.parse(fs.readFileSync(`./setlists_${YEAR}.json`, 'utf-8
 const ticketListUrl = 'mypage/ticket-list?';
 const eventListUrl = 'mypage/event-list?';
 const pointHistoryUrl = 'mypage/point-history?';
+const mypageUrl = 'mypage?';
+
 
 app.use(cors());
 app.use(helmet());
