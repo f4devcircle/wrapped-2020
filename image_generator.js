@@ -1,6 +1,10 @@
 const fs = require('fs')
 const { loadImage, createCanvas } = require('canvas')
 
+/**
+ * 
+ * 
+ * */
 async function main (userData) {
 
   const headerText = `${userData.username} JKT48 Wrapped`;
@@ -75,7 +79,7 @@ async function main (userData) {
   context.fillStyle = fontColor
   context.fillText(topSetlist, rightTextPosition + 25, topQuarter)
   
-  for (let i = 0; i < topVc.length; i++) {
+  for (let i = 0; i < 3; i++) {
     context.font = fontStyle
     context.textBaseline = fontBaseline
     context.textAlign = fontAlignment
@@ -83,7 +87,7 @@ async function main (userData) {
     context.fillText(`#${i + 1} ${topVc[i].name} - ${topVc[i].sum} Tiket`, leftTextPosition, topQuarter + 50 + (i * 50), 400)
   }
 
-  for (let i = 0; i < setlistAttendance.length; i++) {
+  for (let i = 0; i < 3; i++) {
     context.font = fontStyle
     context.textBaseline = fontBaseline
     context.textAlign = fontAlignment
