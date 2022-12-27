@@ -124,7 +124,7 @@ app.post('/', async (req, res, next) => {
       oshi: oshiPhotoUrl,
     }
 
-    main(data);
+    // main(data);
 
     console.log(username);
     console.log(`YEAR : ${YEAR} : ${req.uuid}: ${JSON.stringify(totalPointsThisYear)}`);
