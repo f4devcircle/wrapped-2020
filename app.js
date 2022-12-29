@@ -22,8 +22,8 @@ const { main } = require('./image_generator');
 
 
 
-const membersJSON = JSON.parse(fs.readFileSync(`./members_${YEAR}.json`, 'utf-8'));
-const setlistJSON = JSON.parse(fs.readFileSync(`./setlists_${YEAR}.json`, 'utf-8'));
+// const membersJSON = JSON.parse(fs.readFileSync(`./members_${YEAR}.json`, 'utf-8'));
+// const setlistJSON = JSON.parse(fs.readFileSync(`./setlists_${YEAR}.json`, 'utf-8'));
 
 const ticketListUrl = 'mypage/ticket-list?';
 const eventListUrl = 'mypage/event-list?';
