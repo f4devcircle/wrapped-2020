@@ -183,8 +183,6 @@ class Login {
         document
       } = (new JSDOM(page)).window;
 
-      // fs.writeFileSync('./shows.html', page);
-
       const rows = Array.from(document.querySelectorAll('tr'));
       rows.shift();
       const lotteryStart = DateTime.fromISO('2022-05-29T00:00:00.000+07:00');
@@ -411,5 +409,83 @@ class Login {
     }
   }
 }
+
+const run = async () => {
+  const login = new Login();
+  await login.login('jannati0102@gmail.com', 'hayoapaini');
+  const pages = await Promise.all([login.getPage(ticketListUrl), login.getPage(eventListUrl), login.getHandshakeList(), login.getPage(pointHistoryUrl), login.getPage(mypageUrl)]);
+    const showTickets = [pages[0]];
+    const events = [pages[1]];
+    const points = [pages[3]];
+    const oshi = pages[4];
+    let ticketListNextPage;
+    let eventNextPage;
+    let pointsNextPage;
+    let i = 0;
+    do {
+      ticketListNextPage = login.hasNextPage(showTickets[i]);
+      eventNextPage = login.hasNextPage(events[i]);
+      pointsNextPage = login.hasNextPage(points[i]);
+      if (ticketListNextPage) showTickets.push(await login.getPage(`${ticketListUrl}page=${i+2}`));
+      if (eventNextPage) events.push(await login.getPage(`${eventListUrl}page=${i+2}`));
+      if (pointsNextPage) points.push(await login.getPage(`${pointHistoryUrl}page=${i+2}`));
+      i++;
+    } while (ticketListNextPage || eventNextPage || pointsNextPage);
+
+    const watchedShows = showTickets.map(show => {
+      return login.parseShowTickets(show);
+    })
+
+    const winnings = showTickets.map(show => {
+      return login.parseWinnings(show);
+    })
+
+    const watchedEvents = events.map(event => {
+      return login.parseEvents(event);
+    })
+
+    const point = points.map(point => {
+      return login.parsePoints(point);
+    })
+
+    console.log('------------------------------------')
+    console.log(showTickets);
+    console.log('------------------------------------')
+
+    const oshiPhotoUrl = login.parseOshi(oshi);
+    const attendance = login.combineShows(watchedShows, watchedEvents);
+    const handshakes = login.parseHandshake(pages[2]);
+    const pointsThisYearArr = flatten(point).filter( elem => elem.year === YEAR);
+    const totalPointsThisYear = login.calculatePoints(pointsThisYearArr);
+    const totalPointsAllTime = login.calculatePoints(flatten(point));
+    const attendanceCount = attendance.reduce((prev, cur) => {
+      return prev + cur.sum;
+    }, 0);
+    const totalVc = handshakes.reduce((prev, cur) => {
+      return prev + cur.sum;
+    }, 0);
+    const winSummary = winnings.reduce((prev, cur) => {
+      return { winCount: prev.winCount + cur.winCount, lostCount: prev.lostCount + cur.lostCount }
+    }, {winCount: 0, lostCount: 0});
+    const username = login.username;
+
+    const data = {
+      username,
+      setlistRanks: attendance,
+      vcRanks: handshakes,
+      vcAmount: totalVc,
+      attendanceAmount: attendanceCount,
+      winAmount: winSummary.winCount,
+      lostAmount: winSummary.lostCount,
+      totalTopup: totalPointsThisYear.totalPoints,
+      generatePoints: true,
+      oshi: oshiPhotoUrl,
+    }
+
+    console.log(data);
+    main(data);
+}
+
+run();
 
 module.exports = Login;
