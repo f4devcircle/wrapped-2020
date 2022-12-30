@@ -182,10 +182,13 @@ async function main (userData) {
   context.drawImage(footerLogo, 20, height - (height * 0.040), 64, 64)
 
   // oshi image
+  console.log(`will write file ${userData.filename}.png`);
   const oshiImage = await loadImage(`./assets/members_2022/${userData.oshi}`)
   context.drawImage(oshiImage, ((width / 2) - 192 / 2), 120, 192, 270)
   const imgBuffer = canvas.toBuffer('image/png')
-  fs.writeFileSync(`./${userData.filename}.png`, imgBuffer)
+  fs.writeFileSync(`./share/${userData.filename}.png`, imgBuffer)
+
+  return;
 }
 
 module.exports = {

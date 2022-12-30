@@ -128,7 +128,7 @@ app.post('/', async (req, res, next) => {
       filename: slug,
     }
 
-    main(data);
+    await main(data);
 
     console.log(username);
     console.log(`YEAR : ${YEAR} : ${req.uuid}: ${JSON.stringify(totalPointsThisYear)}`);
