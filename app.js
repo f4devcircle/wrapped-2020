@@ -154,14 +154,14 @@ app.post('/', async (req, res, next) => {
     //   setlistImageBuffers.push(setlistJSON.Empty);
     // }
 
-    if (attendance.length > 0) {
-      console.log(`YEAR : ${YEAR} : ${req.uuid}: ${JSON.stringify(attendance)}`);
-      const length = attendance.length > 3 ? 3 : attendance.length;
-      for (let i = 0; i < length; i++) {
-        setlistImageBuffers.push(setlistJSON[attendance[i].showName] || null);
-        setlistRanks.push(`${attendance[i].showName} - ${attendance[i].sum} kali` || null);
-      }
-    }
+    // if (attendance.length > 0) {
+    //   console.log(`YEAR : ${YEAR} : ${req.uuid}: ${JSON.stringify(attendance)}`);
+    //   const length = attendance.length > 3 ? 3 : attendance.length;
+    //   for (let i = 0; i < length; i++) {
+    //     setlistImageBuffers.push(setlistJSON[attendance[i].showName] || null);
+    //     setlistRanks.push(`${attendance[i].showName} - ${attendance[i].sum} kali` || null);
+    //   }
+    // }
 
     const slug = createSlug(username);
     const html = await generateHTML({
