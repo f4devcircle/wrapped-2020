@@ -61,7 +61,7 @@ async function main (userData) {
   if (vcRanks.length < 3) {
     const currentLength = vcRanks.length;
     for (let i = 0; i < - currentLength; i++) {
-      vcRanks.push({ name: '-', sum: 0 })
+      topVc.push({ name: '-', sum: 0 })
     }
   }
 
