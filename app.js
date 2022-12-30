@@ -51,6 +51,7 @@ app.post('/', async (req, res, next) => {
   const handshakeRanks = [];
   const setlistRanks = [];
   const login = new Login();
+  const slug = createSlug(username);
   try {
     const {
       email,
@@ -122,6 +123,7 @@ app.post('/', async (req, res, next) => {
       totalTopup: totalPointsThisYear.totalPoints,
       generatePoints: displayPoints,
       oshi: oshiPhotoUrl,
+      filename: slug,
     }
 
     main(data);
@@ -163,7 +165,6 @@ app.post('/', async (req, res, next) => {
     //   }
     // }
 
-    const slug = createSlug(username);
     const html = await generateHTML({
       slug,
       name: username,
@@ -175,9 +176,6 @@ app.post('/', async (req, res, next) => {
       setlistTexts: setlistRanks,
       totalPoints: displayPoints ? totalPointsThisYear.totalPoints : null,
     });
-
-    let hsDetailText = handshakeRanks.join('\n');
-    let setlistDetailText = setlistRanks.join('\n');
 
     // const image = await generateImage({
     //   hsDetailText,
@@ -191,7 +189,9 @@ app.post('/', async (req, res, next) => {
     // });
 
     fs.writeFileSync(`./share/${slug}.html`, html);
-    const results = await Promise.all([uploadFile(`share/${slug}.html`, 'text/html', Buffer.from(html))]);
+    const image = fs.readFileSync(`./share/${slug}.png`);
+
+    const results = await Promise.all([uploadFile(`share/${slug}.png`, 'image/png', Buffer.from(image)), uploadFile(`share/${slug}.html`, 'text/html', Buffer.from(html))]);
     if (results) {
       res.send({
         resultUrl: `https://${YEAR}.ngidol.club/share/${slug}.html`
@@ -201,7 +201,7 @@ app.post('/', async (req, res, next) => {
       console.error(results);
     }
     fs.unlinkSync(`./share/${slug}.html`, html);
-    fs.unlinkSync(`./share/${slug}.png`, image);
+    fs.unlinkSync(`./share/${slug}.png`);
   } catch (error) {
     console.log(`${req.uuid}: ${login.username}`);
     console.error(error);

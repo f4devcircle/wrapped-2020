@@ -185,7 +185,7 @@ async function main (userData) {
   const oshiImage = await loadImage(`./assets/members_2022/${userData.oshi}`)
   context.drawImage(oshiImage, ((width / 2) - 192 / 2), 120, 192, 270)
   const imgBuffer = canvas.toBuffer('image/png')
-  fs.writeFileSync('./test.png', imgBuffer)
+  fs.writeFileSync(`./${userData.filename}.png`, imgBuffer)
 }
 
 module.exports = {
