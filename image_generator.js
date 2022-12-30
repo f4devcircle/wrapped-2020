@@ -86,7 +86,7 @@ async function main (userData) {
     context.textBaseline = fontBaseline
     context.textAlign = fontAlignment
     context.fillStyle = fontColor
-    context.fillText(`#${i + 1} ${topVc[i].name} - ${topVc[i].sum} Tiket`, leftTextPosition, topQuarter + 50 + (i * 50), 400)
+    context.fillText(`#${i + 1} ${topVc[i].name ? topVc[i].name : '-' } - ${topVc[i].sum ? topVc[i].sum : 0} Tiket`, leftTextPosition, topQuarter + 50 + (i * 50), 400)
   }
 
   for (let i = 0; i < 3; i++) {
@@ -94,7 +94,7 @@ async function main (userData) {
     context.textBaseline = fontBaseline
     context.textAlign = fontAlignment
     context.fillStyle = fontColor
-    context.fillText(`#${i + 1} ${setlistAttendance[i].showName} - ${setlistAttendance[i].sum} kali`, rightTextPosition + 25, topQuarter + 50 + (i * 50), 300)
+    context.fillText(`#${i + 1} ${setlistAttendance[i].showName ? setlistAttendance[i].showName : '-'} - ${setlistAttendance[i].sum ? setlistAttendance[i].sum : '0'} kali`, rightTextPosition + 25, topQuarter + 50 + (i * 50), 300)
   }
   
   // Jumlah Video Call
