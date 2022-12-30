@@ -51,7 +51,6 @@ app.post('/', async (req, res, next) => {
   const handshakeRanks = [];
   const setlistRanks = [];
   const login = new Login();
-  const slug = createSlug(username);
   try {
     const {
       email,
@@ -68,6 +67,10 @@ app.post('/', async (req, res, next) => {
     let ticketListNextPage;
     let eventNextPage;
     let pointsNextPage;
+    const username = login.username;
+    const slug = createSlug(username);
+
+
     let i = 0;
     do {
       ticketListNextPage = login.hasNextPage(showTickets[i]);
@@ -110,7 +113,6 @@ app.post('/', async (req, res, next) => {
     const winSummary = winnings.reduce((prev, cur) => {
       return { winCount: prev.winCount + cur.winCount, lostCount: prev.lostCount + cur.lostCount }
     }, {winCount: 0, lostCount: 0});
-    const username = login.username;
 
     const data = {
       username,
