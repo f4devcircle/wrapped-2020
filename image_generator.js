@@ -16,7 +16,7 @@ async function main (userData) {
   const fontColor = '#000000';
   const headerFont = 'bold 30pt Sans-Serif';
   const fontStyle = '19pt Courier';
-  const hashtag = '#jkt48wrapped2022';
+  const hashtag = '#JKT48Wrapped2022';
   const winRate = 'Winrate Verif Teater';
   const totalVideoCall = 'Jumlah Video Call';
   const totalAttendance = 'Jumlah Kehadiran';
