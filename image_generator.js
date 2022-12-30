@@ -156,7 +156,7 @@ async function main (userData) {
     context.textAlign = 'center'
     context.fillStyle = fontColor
     if (topupAmount === 0) {
-      context.fillText('Nihil', midWidth, height * 0.25 + 70)
+      context.fillText('Nihil', midWidth, height * 0.30 + 70)
     }
     if (topupAmount > 0) {
       context.fillText(`${numberFormatter.format(topupAmount)} P`, midWidth, height * 0.30 + 70)
