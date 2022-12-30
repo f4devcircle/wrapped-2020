@@ -32,7 +32,7 @@ async function main (userData) {
   const lostAmount = userData.lostAmount;
   const topVc = userData.vcRanks;
   const setlistAttendance = userData.setlistRanks;
-  const percentage = Math.round(winAmount / (winAmount + lostAmount) * 100);
+  const percentage = Number.isInteger(Math.round(winAmount / (winAmount + lostAmount) * 100)) ? Math.round(winAmount / (winAmount + lostAmount) * 100) : 0;
   const topupAmount = userData.totalTopup;
 
   const width = 1080
