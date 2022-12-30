@@ -134,25 +134,25 @@ app.post('/', async (req, res, next) => {
     const memberImagebuffers = [];
     const setlistImageBuffers = [];
 
-    if (handshakes.length > 0) {
-      const length = handshakes.length > 3 ? 3 : handshakes.length;
-      console.log(`YEAR : ${YEAR} : ${req.uuid}: ${JSON.stringify(handshakes)}`);
-      for (let i = 0; i < length; i++) {
-        const memberName = handshakes[i].name.split(' ').slice(0, 3).join(' ');
-        memberImagebuffers.push(membersJSON[memberName]);
-        handshakeRanks.push(`${limitText(memberName)} - ${handshakes[i].sum} kali` || null);
-      }
-    }
+    // if (handshakes.length > 0) {
+    //   const length = handshakes.length > 3 ? 3 : handshakes.length;
+    //   console.log(`YEAR : ${YEAR} : ${req.uuid}: ${JSON.stringify(handshakes)}`);
+    //   for (let i = 0; i < length; i++) {
+    //     const memberName = handshakes[i].name.split(' ').slice(0, 3).join(' ');
+    //     memberImagebuffers.push(membersJSON[memberName]);
+    //     handshakeRanks.push(`${limitText(memberName)} - ${handshakes[i].sum} kali` || null);
+    //   }
+    // }
 
-    if (handshakes.length === 0) {
-      handshakeRanks.push('Tidak tersedia');
-      memberImagebuffers.push(membersJSON.Empty);
-    }
+    // if (handshakes.length === 0) {
+    //   handshakeRanks.push('Tidak tersedia');
+    //   memberImagebuffers.push(membersJSON.Empty);
+    // }
 
-    if (attendance.length === 0) {
-      setlistRanks.push('Tidak tersedia');
-      setlistImageBuffers.push(setlistJSON.Empty);
-    }
+    // if (attendance.length === 0) {
+    //   setlistRanks.push('Tidak tersedia');
+    //   setlistImageBuffers.push(setlistJSON.Empty);
+    // }
 
     if (attendance.length > 0) {
       console.log(`YEAR : ${YEAR} : ${req.uuid}: ${JSON.stringify(attendance)}`);
@@ -179,16 +179,16 @@ app.post('/', async (req, res, next) => {
     let hsDetailText = handshakeRanks.join('\n');
     let setlistDetailText = setlistRanks.join('\n');
 
-    const image = await generateImage({
-      hsDetailText,
-      hsImage: memberImagebuffers[0] || membersJSON["Empty"],
-      setlistDetailText,
-      setlistImage: setlistImageBuffers[0],
-      theaterCountText: totalAttendance.toString(),
-      hsCountText: totalHS.toString(),
-      userNameText: username,
-      totalPointsThisYear: displayPoints ? totalPointsThisYear.totalPoints : null,
-    });
+    // const image = await generateImage({
+    //   hsDetailText,
+    //   hsImage: memberImagebuffers[0] || membersJSON["Empty"],
+    //   setlistDetailText,
+    //   setlistImage: setlistImageBuffers[0],
+    //   theaterCountText: totalAttendance.toString(),
+    //   hsCountText: totalHS.toString(),
+    //   userNameText: username,
+    //   totalPointsThisYear: displayPoints ? totalPointsThisYear.totalPoints : null,
+    // });
 
     fs.writeFileSync(`./share/${slug}.html`, html);
     fs.writeFileSync(`./share/${slug}.png`, image);
