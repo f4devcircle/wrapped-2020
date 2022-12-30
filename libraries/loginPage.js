@@ -16,7 +16,7 @@ const eventListUrl = 'mypage/event-list?';
 const pointHistoryUrl = 'mypage/point-history?';
 const mypageUrl = 'mypage?';
 
-const setlist = ['Pajama Drive', 'Banzai', 'Aturan Anti Cinta', 'Gadis Gadis Remaja', 'Tunas di Balik Seragam'];
+const setlist = ['Pajama Drive', 'BANZAI JKT48', 'Aturan Anti Cinta', 'Gadis Gadis Remaja', 'Tunas di Balik Seragam'];
 const YEAR = process.env.YEAR;
 const isSetlistName = text => setlist.some(setlistTitle => text ? text.includes(setlistTitle) : '');
 const getSetlistName = text => setlist.find(setlistTitle => text.includes(setlistTitle));
