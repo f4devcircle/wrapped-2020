@@ -53,14 +53,14 @@ async function main (userData) {
 
   if (setlistAttendance.length < 3) {
     const currentLength = setlistAttendance.length;
-    for (let i = 0; i < - currentLength; i++) {
+    for (let i = 0; i <  3 - currentLength; i++) {
       setlistAttendance.push({ showName: '-', sum: 0 })
     }
   }
 
   if (topVc.length < 3) {
-    const currentLength = vcRanks.length;
-    for (let i = 0; i < - currentLength; i++) {
+    const currentLength = topVc.length;
+    for (let i = 0; i <  3 - currentLength; i++) {
       topVc.push({ name: '-', sum: 0 })
     }
   }
