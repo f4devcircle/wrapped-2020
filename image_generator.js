@@ -9,7 +9,7 @@ async function main (userData) {
 
   console.log(`will generate image with data ${JSON.stringify(userData)}`);
 
-  const headerText = `JKT48 Wrapped - ${userData.username}`;
+  const headerText = `JKT48 Wrapped-nya ${userData.username}`;
   const headerTextOptions = 'bold 25pt Gotham';
   const topVC = 'Video Call Teratas';
   const topSetlist = 'Setlist Teratas';
