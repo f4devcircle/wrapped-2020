@@ -191,8 +191,7 @@ app.post('/', async (req, res, next) => {
     // });
 
     fs.writeFileSync(`./share/${slug}.html`, html);
-    fs.writeFileSync(`./share/${slug}.png`, image);
-    const results = await Promise.all([uploadFile(`share/${slug}.png`, 'image/png', Buffer.from(image)), uploadFile(`share/${slug}.html`, 'text/html', Buffer.from(html))]);
+    const results = await Promise.all([uploadFile(`share/${slug}.html`, 'text/html', Buffer.from(html))]);
     if (results) {
       res.send({
         resultUrl: `https://${YEAR}.ngidol.club/share/${slug}.html`
