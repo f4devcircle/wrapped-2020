@@ -50,6 +50,22 @@ async function main (userData) {
   const midWidth = width * 0.50
   const winRateBreakdown = `(${winAmount} menang, ${lostAmount} kalah)`
 
+
+  if (setlistAttendance.length < 3) {
+    const currentLength = setlistAttendance.length;
+    for (let i = 0; i < - currentLength; i++) {
+      setlistAttendance.push({ showName: '-', sum: 0 })
+    }
+  }
+
+  if (vcRanks.length < 3) {
+    const currentLength = vcRanks.length;
+    for (let i = 0; i < - currentLength; i++) {
+      vcRanks.push({ name: '-', sum: 0 })
+    }
+  }
+
+
   context.fillStyle = '#ffffff'
   context.fillRect(0, 0, width, height)
 
